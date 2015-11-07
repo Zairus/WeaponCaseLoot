@@ -56,7 +56,33 @@ public final class WCLConfig
 	public static float damage_legendary_flawless = 13;
 	public static float damage_legendary_perfect = 13;
 	
-	public static String[] sword_names = {"Balance Sword", "Decorated Blue", "Warrior's Blade", "Stun Cut", "Thin Spike"};
+	public static String[] sword_names = {
+			"Balance Sword"
+			,"The Crusader"
+			,"Butcher Blade"
+			,"Mageblade"
+			,"Long Sword"
+			,"The Shadow"
+			,"Jade"
+			,"Blaze Guard"
+			,"Heart Spike"
+			,"Torment"
+			,"Phantom"
+			,"Gladius"};
+	
+	public static int[] sword_rarity = {
+			0
+			,1
+			,2
+			,0
+			,0
+			,3
+			,2
+			,0
+			,0
+			,1
+			,1
+			,0};
 	
 	public static void init(File cFile)
 	{
@@ -105,7 +131,9 @@ public final class WCLConfig
 		damage_legendary_flawless = configuration.getFloat("damage_legendary_flawless", "Damage", damage_legendary_flawless, 0, 5000, "Damage value for Flawless Legendary weapon");
 		damage_legendary_perfect = configuration.getFloat("damage_legendary_perfect", "Damage", damage_legendary_perfect, 0, 5000, "Damage value for Perfect Legendary weapon");
 		
-		sword_names = configuration.getStringList("sword_names", "names", sword_names, "Names for swords, must be " + WCLConstants.totalSwords);
+		String[] sword_names1 = configuration.getStringList("sword_names", "names", sword_names, "Names for swords, must be " + WCLConstants.totalSwords);
+		if (sword_names1.length == WCLConstants.totalSwords)
+			sword_names = sword_names1;
 		
 		configuration.save();
 	}

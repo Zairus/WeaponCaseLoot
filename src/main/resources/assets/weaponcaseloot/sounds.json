@@ -1,0 +1,26 @@
+{
+	"case_open": {
+		"category": "master"
+		,"sounds": [
+			{"name": "case_open1", "stream": false}
+			,{"name": "case_open2", "stream": false}
+			,{"name": "case_open3", "stream": false}
+			,{"name": "case_open4", "stream": false}
+			,{"name": "case_open5", "stream": false}
+		]
+	}
+	,"weapon_loop": {
+		"category": "master"
+		,"sounds": [
+			{"name": "weapon_loop1", "stream": false}
+		]
+	}
+	,"blade": {
+		"category": "master"
+		,"sounds": [
+			{"name": "blade1", "stream": false}
+			,{"name": "blade2", "stream": false}
+			,{"name": "blade3", "stream": false}
+		]
+	}
+}

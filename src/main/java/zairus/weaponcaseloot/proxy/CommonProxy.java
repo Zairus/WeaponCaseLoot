@@ -15,6 +15,7 @@ public class CommonProxy
 	public void init(FMLInitializationEvent e)
 	{
 		WCLItems.register();
+		WCLItems.addLoot();
 	}
 	
 	public void postInit(FMLPostInitializationEvent e)

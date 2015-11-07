@@ -2,6 +2,9 @@ package zairus.weaponcaseloot.item;
 
 import java.util.List;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -24,7 +27,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConstants;
 
-public class WeaponSword extends WCLItem
+public class WeaponSword extends WCLItemWeapon
 {
 	private float swordDamage;
 	private final Item.ToolMaterial swordMaterial;
@@ -109,9 +112,13 @@ public class WeaponSword extends WCLItem
 			}
 		}
 		
-		int i = 0;
-		
+		boolean isCrit = (holder.fallDistance > 0.2F);
 		attackDamage += EnchantmentHelper.getEnchantmentModifierLiving(holder, (EntityLivingBase) enemy);
+		
+		if (isCrit)
+			attackDamage *= 1.2;
+		
+		int i = 0;
 		i += EnchantmentHelper.getKnockbackModifier(holder, (EntityLivingBase) enemy);
 		
 		boolean flag = enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)holder), attackDamage);
@@ -197,22 +204,50 @@ public class WeaponSword extends WCLItem
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int i1, boolean b1)
 	{
+		if (stack.hasDisplayName())
+		{
+			String name = stack.getDisplayName();
+			
+			char fChar = name.charAt(0);
+			if (fChar != WCLConstants.colorChar && (fChar == 'b' || fChar == 'a' || fChar == 'e' || fChar == '6'))
+				stack.setStackDisplayName(WCLConstants.colorChar + name);
+		}
+		
 		if (stack.hasTagCompound())
 		{
 			NBTTagCompound tag = stack.getTagCompound();
-			if (!tag.hasKey("weapon_enchant_applied"))
+			
+			if (tag.hasKey(WCLConstants.KEY_LOOPSOUNDTIMER))
 			{
-				if (tag.hasKey("ench"))
+				tag.setInteger("temp_looping", 1);
+				
+				float t = tag.getFloat(WCLConstants.KEY_LOOPSOUNDTIMER);
+				int iconIndex = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
+				
+				if (!tag.hasKey("temp_index"))
 				{
-					tag.setInteger("weapon_enchant_applied", 1);
-					
-					stack.addEnchantment(Enchantment.fireAspect, world.rand.nextInt(2) + 1);
-					stack.addEnchantment(Enchantment.knockback, world.rand.nextInt(2) + 1);
-					stack.addEnchantment(Enchantment.looting, world.rand.nextInt(3) + 1);
-					stack.addEnchantment(Enchantment.sharpness, world.rand.nextInt(5) + 1);
-					stack.addEnchantment(Enchantment.smite, world.rand.nextInt(5) + 1);
-					stack.addEnchantment(Enchantment.baneOfArthropods, world.rand.nextInt(5) + 1);
-					//stack.addEnchantment(Enchantment.unbreaking, world.rand.nextInt(2) + 1);
+					tag.setInteger("temp_index", iconIndex);
+					tag.setString("temp_name", stack.getDisplayName());
+					stack.setStackDisplayName("Weapon Sword");
+				}
+				
+				if (t < 95.0F)
+					world.playSoundAtEntity(entity, "weaponcaseloot:weapon_loop", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+				
+				--t;
+				
+				tag.setFloat(WCLConstants.KEY_LOOPSOUNDTIMER, t);
+				tag.setInteger(WCLConstants.KEY_WEAPONINDEX, itemRand.nextInt(WCLConstants.totalSwords));
+				
+				if (t <= 10.0F)
+				{
+					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
+					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
+					tag.removeTag("temp_index");
+					stack.setStackDisplayName(tag.getString("temp_name"));
+					tag.removeTag("temp_name");
+					tag.removeTag("temp_looping");
+					world.playSoundAtEntity(entity, "weaponcaseloot:blade", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 				}
 			}
 		}
@@ -286,16 +321,32 @@ public class WeaponSword extends WCLItem
     {
 		NBTTagCompound tag = stack.getTagCompound();
 		
-		if (tag != null)
+		if (tag != null && !(tag.hasKey("temp_looping")))
 		{
 			if (tag.hasKey(WCLConstants.KEY_STATE))
-				list.add("State: " + tag.getString(WCLConstants.KEY_STATE));
+				list.add("Quality: " + tag.getString(WCLConstants.KEY_STATE));
 			
 			if (tag.hasKey(WCLConstants.KEY_RARITY))
 				list.add("Rarity: " + tag.getString(WCLConstants.KEY_RARITY));
 			
 			if (tag.hasKey(WCLConstants.KEY_WEAPON_ATTACKDAMAGE))
-				list.add("Attack Damage: " + tag.getFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE));
+			{
+				float attackDamage = tag.getFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE);
+				int sLev = EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
+				
+				if (sLev > 0)
+					attackDamage += sLev + 1;
+				
+				list.add("Attack Damage: " + attackDamage);
+			}
 		}
     }
+	
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Multimap getItemAttributeModifiers()
+	{
+		//return super.getItemAttributeModifiers();
+		return HashMultimap.create();
+	}
 }

@@ -1,5 +1,8 @@
 package zairus.weaponcaseloot.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,30 +26,75 @@ public class WeaponCase extends WCLItem
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
 		ItemStack weapon = new ItemStack(WCLItems.sword, 1);
-		int lootPos = world.rand.nextInt(WCLConstants.totalSwords);
+		
+		int chance = itemRand.nextInt(100);
+		int level;
+		
+		if (chance < 70)
+		{
+			level = 0;
+		} else if (chance < 95) {
+			level = 1;
+		} else if (chance < 99) {
+			level = 2;
+		} else {
+			level = 3;
+		}
+		
+		int swordId = getSwordIdFromRarity(level); // itemRand.nextInt(WCLConstants.totalSwords);
+		
+		String[] levels_colors = new String[4];
+		levels_colors[0] = WCLConstants.colorChar + "b";
+		levels_colors[1] = WCLConstants.colorChar + "a";
+		levels_colors[2] = WCLConstants.colorChar + "e";
+		levels_colors[3] = WCLConstants.colorChar + "6";
+		
+		world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 		
 		NBTTagCompound weaponData = new NBTTagCompound();
 		
 		int state_value = world.rand.nextInt(5);
-		int rarity_value = 0; //world.rand.nextInt(4); // 0 common, 1 uncommon, 2 rare, 3 legendary
+		int rarity_value = WCLConfig.sword_rarity[swordId];
 		
 		weaponData.setString(WCLConstants.KEY_STATE, states[state_value]);
 		weaponData.setString(WCLConstants.KEY_RARITY, rarity[rarity_value]);
-		weaponData.setInteger(WCLConstants.KEY_WEAPONINDEX, lootPos);
+		weaponData.setFloat(WCLConstants.KEY_LOOPSOUNDTIMER, 100.0F);
+		weaponData.setInteger(WCLConstants.KEY_WEAPONINDEX, swordId);
 		weaponData.setInteger(WCLConstants.KEY_WEAPON_DURABILITY, getWeaponDurability(state_value, rarity_value));
 		weaponData.setFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE, getWeaponDamage(state_value, rarity_value));
-		//ContainerEnchantment
+		
 		weapon.setTagCompound(weaponData);
-		weapon.setStackDisplayName(states[state_value] + " " + rarity[rarity_value] + " " + WCLConfig.sword_names[lootPos]);
+		weapon.setStackDisplayName(levels_colors[rarity_value] + WCLConfig.sword_names[swordId]);
 		
 		player.inventory.decrStackSize(player.inventory.currentItem, 1);
 		
 		if (!player.inventory.addItemStackToInventory(weapon))
 		{
-			world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
+			if (!world.isRemote)
+				world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
 		}
 		
 		return stack;
+	}
+	
+	private int getSwordIdFromRarity(int rarity)
+	{
+		int id = 0;
+		
+		List<List<Integer>> r = new ArrayList<List<Integer>>();
+		r.add(new ArrayList<Integer>());
+		r.add(new ArrayList<Integer>());
+		r.add(new ArrayList<Integer>());
+		r.add(new ArrayList<Integer>());
+		
+		for (int i = 0; i < WCLConstants.totalSwords; ++i)
+		{
+			r.get(WCLConfig.sword_rarity[i]).add(i);
+		}
+		
+		id = r.get(rarity).get(itemRand.nextInt(r.get(rarity).size()));
+		
+		return id;
 	}
 	
 	private int getWeaponDurability(int wState, int wRarity)

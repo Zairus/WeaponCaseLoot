@@ -1,9 +1,9 @@
 package zairus.weaponcaseloot.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraftforge.common.ChestGenHooks;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
 
@@ -11,7 +11,7 @@ public class WCLItems
 {
 	public static WCLItem weaponcase;
 	
-	public static WCLItem sword;
+	public static WCLItemWeapon sword;
 	
 	static
 	{
@@ -23,20 +23,19 @@ public class WCLItems
 	public static final void register()
 	{
 		GameRegistry.registerItem(weaponcase, weaponcase.getUnlocalizedName());
-		GameRegistry.registerItem(sword, ((WeaponSword)sword).getUnlocalizedName());
+		GameRegistry.registerItem(sword, sword.getUnlocalizedName());
 	}
 	
 	public static final void addLoot()
 	{
-		;
-	}
-	
-	public static List<WCLItem> getWeaponLoot()
-	{
-		List<WCLItem> lootList = new ArrayList<WCLItem>();
-		
-		lootList.add(sword);
-		
-		return lootList;
+		ChestGenHooks.addItem(ChestGenHooks.PYRAMID_DESERT_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.MINESHAFT_CORRIDOR, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.PYRAMID_JUNGLE_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CORRIDOR, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CROSSING, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_LIBRARY, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
+		ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH, new WeightedRandomChestContent(new ItemStack(weaponcase, 1), 1, 1, 2));
 	}
 }
