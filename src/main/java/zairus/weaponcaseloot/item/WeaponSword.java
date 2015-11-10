@@ -25,6 +25,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
 
 public class WeaponSword extends WCLItemWeapon
@@ -259,6 +260,55 @@ public class WeaponSword extends WCLItemWeapon
 		;
 	}
 	
+	@SuppressWarnings("unchecked")
+	@SideOnly(Side.CLIENT)
+    public void getSubItems(Item item, CreativeTabs creativeTab, @SuppressWarnings("rawtypes") List list)
+    {
+		for (int i = 0; i < WCLConstants.totalSwords; ++i)
+		{
+			for (int q = 0; q < 5; ++q)
+			{
+				list.add(getSwordFromId(i, q));
+			}
+		}
+    }
+	
+	public ItemStack getSwordFromId(int swordId, int quality)
+	{
+		ItemStack sword = new ItemStack(WCLItems.sword, 1);
+		int rarity = WCLConfig.sword_rarity[swordId];
+		NBTTagCompound weaponData = new NBTTagCompound();
+		
+		weaponData.setString(WCLConstants.KEY_STATE, WCLConstants.weapon_quality[quality]);
+		weaponData.setString(WCLConstants.KEY_RARITY, WCLConstants.weapon_rarity[rarity]);
+		weaponData.setFloat(WCLConstants.KEY_LOOPSOUNDTIMER, 100.0F);
+		weaponData.setInteger(WCLConstants.KEY_WEAPONINDEX, swordId);
+		weaponData.setInteger(WCLConstants.KEY_WEAPON_DURABILITY, getWeaponDurability(quality, rarity));
+		weaponData.setFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE, getWeaponDamage(quality, rarity));
+		
+		sword.setTagCompound(weaponData);
+		sword.setStackDisplayName(getNameFromSwordId(swordId));
+		
+		return sword;
+	}
+	
+	public String getNameFromSwordId(int swordId)
+	{
+		String name;
+		
+		int rarity = WCLConfig.sword_rarity[swordId];
+		
+		String[] levels_colors = new String[4];
+		levels_colors[0] = WCLConstants.colorChar + "b";
+		levels_colors[1] = WCLConstants.colorChar + "a";
+		levels_colors[2] = WCLConstants.colorChar + "e";
+		levels_colors[3] = WCLConstants.colorChar + "6";
+		
+		name = levels_colors[rarity] + WCLConfig.sword_names[swordId];
+		
+		return name;
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister)
@@ -346,7 +396,184 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public Multimap getItemAttributeModifiers()
 	{
-		//return super.getItemAttributeModifiers();
 		return HashMultimap.create();
+	}
+	
+	private int getWeaponDurability(int wState, int wRarity)
+	{
+		int durability = 0;
+		
+		if (wRarity == 0)
+		{
+			switch (wState)
+			{
+			case 0:
+				durability = WCLConfig.durability_common_broken;
+				break;
+			case 1:
+				durability = WCLConfig.durability_common_crude;
+				break;
+			case 2:
+				durability = WCLConfig.durability_common_good;
+				break;
+			case 3:
+				durability = WCLConfig.durability_common_flawless;
+				break;
+			case 4:
+				durability = WCLConfig.durability_common_perfect;
+				break;
+			}
+		} else if (wRarity == 1)
+		{
+			switch (wState)
+			{
+			case 0:
+				durability = WCLConfig.durability_uncommon_broken;
+				break;
+			case 1:
+				durability = WCLConfig.durability_uncommon_crude;
+				break;
+			case 2:
+				durability = WCLConfig.durability_uncommon_good;
+				break;
+			case 3:
+				durability = WCLConfig.durability_uncommon_flawless;
+				break;
+			case 4:
+				durability = WCLConfig.durability_uncommon_perfect;
+				break;
+			}
+		} else if (wRarity == 2)
+		{
+			switch (wState)
+			{
+			case 0:
+				durability = WCLConfig.durability_rare_broken;
+				break;
+			case 1:
+				durability = WCLConfig.durability_rare_crude;
+				break;
+			case 2:
+				durability = WCLConfig.durability_rare_good;
+				break;
+			case 3:
+				durability = WCLConfig.durability_rare_flawless;
+				break;
+			case 4:
+				durability = WCLConfig.durability_rare_perfect;
+				break;
+			}
+		} else if (wRarity == 3)
+		{
+			switch (wState)
+			{
+			case 0:
+				durability = WCLConfig.durability_legendary_broken;
+				break;
+			case 1:
+				durability = WCLConfig.durability_legendary_crude;
+				break;
+			case 2:
+				durability = WCLConfig.durability_legendary_good;
+				break;
+			case 3:
+				durability = WCLConfig.durability_legendary_flawless;
+				break;
+			case 4:
+				durability = WCLConfig.durability_legendary_perfect;
+				break;
+			}
+		}
+		
+		return durability;
+	}
+	
+	private float getWeaponDamage(int wState, int wRarity)
+	{
+		float damage = 0;
+		
+		if (wRarity == 0)
+		{
+			switch (wState)
+			{
+			case 0:
+				damage = WCLConfig.damage_common_broken;
+				break;
+			case 1:
+				damage = WCLConfig.damage_common_crude;
+				break;
+			case 2:
+				damage = WCLConfig.damage_common_good;
+				break;
+			case 3:
+				damage = WCLConfig.damage_common_flawless;
+				break;
+			case 4:
+				damage = WCLConfig.damage_common_perfect;
+				break;
+			}
+		} else if (wRarity == 1)
+		{
+			switch (wState)
+			{
+			case 0:
+				damage = WCLConfig.damage_uncommon_broken;
+				break;
+			case 1:
+				damage = WCLConfig.damage_uncommon_crude;
+				break;
+			case 2:
+				damage = WCLConfig.damage_uncommon_good;
+				break;
+			case 3:
+				damage = WCLConfig.damage_uncommon_flawless;
+				break;
+			case 4:
+				damage = WCLConfig.damage_uncommon_perfect;
+				break;
+			}
+		} else if (wRarity == 2)
+		{
+			switch (wState)
+			{
+			case 0:
+				damage = WCLConfig.damage_rare_broken;
+				break;
+			case 1:
+				damage = WCLConfig.damage_rare_crude;
+				break;
+			case 2:
+				damage = WCLConfig.damage_rare_good;
+				break;
+			case 3:
+				damage = WCLConfig.damage_rare_flawless;
+				break;
+			case 4:
+				damage = WCLConfig.damage_rare_perfect;
+				break;
+			}
+		} else if (wRarity == 3)
+		{
+			switch (wState)
+			{
+			case 0:
+				damage = WCLConfig.damage_legendary_broken;
+				break;
+			case 1:
+				damage = WCLConfig.damage_legendary_crude;
+				break;
+			case 2:
+				damage = WCLConfig.damage_legendary_good;
+				break;
+			case 3:
+				damage = WCLConfig.damage_legendary_flawless;
+				break;
+			case 4:
+				damage = WCLConfig.damage_legendary_perfect;
+				break;
+			}
+		}
+		
+		return damage;
 	}
 }

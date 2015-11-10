@@ -4,7 +4,7 @@ public class WCLConstants
 {
 	public static final String MOD_ID = "weaponcaseloot";
 	public static final String MOD_NAME = "Weapon Case Loot";
-	public static final String MOD_VERSION = "1.0.6";
+	public static final String MOD_VERSION = "1.0.7";
 	
 	public static final String MOD_COMMON_PROXY = "zairus.weaponcaseloot.proxy.CommonProxy";
 	public static final String MOD_CLIENT_PROXY = "zairus.weaponcaseloot.proxy.ClientProxy";
@@ -19,4 +19,7 @@ public class WCLConstants
 	public static final int totalSwords = 12;
 	
 	public static final char colorChar = '\u00A7';
+	
+	public static final String[] weapon_rarity = {"Common", "Uncommon", "Rare", "Legendary"};
+	public static final String[] weapon_quality = {"Broken", "Crude", "Good", "Flawless", "Perfect"};
 }
