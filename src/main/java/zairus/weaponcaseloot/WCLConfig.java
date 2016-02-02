@@ -68,7 +68,20 @@ public final class WCLConfig
 			,"Heart Spike"
 			,"Torment"
 			,"Phantom"
-			,"Gladius"};
+			,"Gladius"
+			
+			,"Nat Blade"
+			,"Vine Sword"
+			,"Knight Blade"
+			,"Red"
+			,"Dog Bone"
+			,"Ice Blade"
+			,"Sabre"
+			,"Molten Sword"
+			,"Phase Blade"
+			,"Crystal Wing"
+			,"Wakizashi"
+			,"Wizard Spike"};
 	
 	public static int[] sword_rarity = {
 			0
@@ -82,7 +95,20 @@ public final class WCLConfig
 			,0
 			,1
 			,1
-			,0};
+			,0
+			
+			,1
+			,0
+			,0
+			,0
+			,1
+			,0
+			,0
+			,2
+			,0
+			,2
+			,3
+			,1};
 	
 	public static void init(File cFile)
 	{

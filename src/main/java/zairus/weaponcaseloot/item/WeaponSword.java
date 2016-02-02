@@ -27,6 +27,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
+import zairus.weaponcaseloot.states.WCLAchievementList;
 
 public class WeaponSword extends WCLItemWeapon
 {
@@ -242,6 +243,11 @@ public class WeaponSword extends WCLItemWeapon
 				
 				if (t <= 10.0F)
 				{
+					int rarity = WCLConfig.sword_rarity[tag.getInteger("temp_index")];
+					
+					if (rarity == 3)
+						((EntityPlayer)entity).triggerAchievement(WCLAchievementList.legendary);
+					
 					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
 					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
 					tag.removeTag("temp_index");

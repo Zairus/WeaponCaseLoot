@@ -1,2 +1,5 @@
 item.weaponcase.name=Weapon Case: First Edition
+item.weaponcase.2.name=Weapon Case: Second Edition
 item.weaponsword.name=Weapon Sword
+achievement.legendary=Legendary
+achievement.legendary.desc=Get a Legendary Sword from a Weapon Case

@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import zairus.weaponcaseloot.proxy.CommonProxy;
+import zairus.weaponcaseloot.states.WCLAchievementList;
 
 @Mod(modid = WCLConstants.MOD_ID, name = WCLConstants.MOD_NAME, version = WCLConstants.MOD_VERSION)
 public class WeaponCaseLoot
@@ -35,6 +36,8 @@ public class WeaponCaseLoot
 	public void init(FMLInitializationEvent event)
 	{
 		WeaponCaseLoot.proxy.init(event);
+		
+		WCLAchievementList.initPages();
 	}
 	
 	@EventHandler
