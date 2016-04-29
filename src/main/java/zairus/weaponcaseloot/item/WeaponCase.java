@@ -15,15 +15,16 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConfig;
+import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WeaponCase extends WCLItem
 {
-	public static int editions = 2;
+	public static int editions = 4;
 	private IIcon[] icons;
 	
 	public WeaponCase()
 	{
-		this.maxStackSize = 16;
+		this.maxStackSize = 64;
 		this.setCreativeTab(CreativeTabs.tabCombat);
 		
 		this.setHasSubtypes(true);
@@ -81,19 +82,40 @@ public class WeaponCase extends WCLItem
 			level = 3;
 		}
 		
-		int swordId = getSwordIdFromRarity(stack, level);
 		int quality = world.rand.nextInt(5);
 		
-		ItemStack weapon = ((WeaponSword)WCLItems.sword).getSwordFromId(swordId, quality);
-		
-		world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-		
-		player.inventory.decrStackSize(player.inventory.currentItem, 1);
-		
-		if (!player.inventory.addItemStackToInventory(weapon))
+		if (stack.getItemDamage() < 2)
 		{
-			if (!world.isRemote)
-				world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
+			int swordId = getSwordIdFromRarity(stack, level);
+			
+			ItemStack weapon = ((WeaponSword)WCLItems.sword).getSwordFromId(swordId, quality);
+			
+			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+			
+			player.inventory.decrStackSize(player.inventory.currentItem, 1);
+			
+			if (!player.inventory.addItemStackToInventory(weapon))
+			{
+				if (!world.isRemote)
+					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
+			}
+		}
+		
+		if (stack.getItemDamage() == 3 && WeaponCaseLoot.baublesExist())
+		{
+			int ringId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
+			
+			ItemStack ring = ((WCLItemBauble)WCLItems.bauble).getRingFromId(ringId, quality);
+			
+			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+			
+			player.inventory.decrStackSize(player.inventory.currentItem, 1);
+			
+			if (!player.inventory.addItemStackToInventory(ring))
+			{
+				if (!world.isRemote)
+					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ring));
+			}
 		}
 		
 		return stack;
@@ -111,7 +133,6 @@ public class WeaponCase extends WCLItem
 		
 		int edition = stack.getItemDamage();
 		
-		//WCLConstants.totalSwords
 		for (int i = 0 + (edition * 12); i < 12 * (edition + 1); ++i)
 		{
 			r.get(WCLConfig.sword_rarity[i]).add(i);

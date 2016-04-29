@@ -23,4 +23,13 @@
 			,{"name": "blade3", "stream": false}
 		]
 	}
+	,"power": {
+		"category": "master"
+		,"sounds": [
+			{"name": "power1", "stream": false}
+			,{"name": "power2", "stream": false}
+			,{"name": "power3", "stream": false}
+			,{"name": "power4", "stream": false}
+		]
+	}
 }

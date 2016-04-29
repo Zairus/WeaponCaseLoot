@@ -45,4 +45,20 @@ public class WeaponCaseLoot
 	{
 		WeaponCaseLoot.proxy.postInit(event);
 	}
+	
+	public static boolean baublesExist()
+	{
+		boolean exists = false;
+		
+		try {
+			Class.forName("baubles.common.Baubles");
+			exists = true;
+		}
+		catch (Exception e)
+		{
+			exists = false;
+		}
+		
+		return exists;
+	}
 }

@@ -1,8 +1,11 @@
 package zairus.weaponcaseloot;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraftforge.common.config.Configuration;
+import zairus.weaponcaseloot.effects.WCLEffectHandler.effectType;
 
 public final class WCLConfig
 {
@@ -110,6 +113,52 @@ public final class WCLConfig
 			,3
 			,1};
 	
+	public static String[] ring_names = {
+			"The Pearl"
+			,"Fire Stone"
+			,"Burning Stone"
+			,"The Ruby"
+			,"The Ruby Eye"
+			,"Hope"
+			,"Purity Hope"
+			,"The Onyx"
+			,"Jordan"
+			,"Breeze"
+			,"Wind"
+			,"The Ocelot"};
+	
+	public static int[] ring_rarity = {
+			2
+			,0
+			,1
+			,0
+			,1
+			,0
+			,0
+			,2
+			,3
+			,0
+			,0
+			,1};
+	
+	public static List<effectType[]> ring_effects = new ArrayList<effectType[]>();
+	
+	static
+	{
+		ring_effects.add(new effectType[] {effectType.JUMP_2, effectType.SPEED_2});
+		ring_effects.add(new effectType[] {effectType.DAMAGE_1});
+		ring_effects.add(new effectType[] {effectType.DAMAGE_2});
+		ring_effects.add(new effectType[] {effectType.RESISTANCE_1});
+		ring_effects.add(new effectType[] {effectType.RESISTANCE_2});
+		ring_effects.add(new effectType[] {effectType.JUMP_1});
+		ring_effects.add(new effectType[] {effectType.JUMP_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_2, effectType.DAMAGE_2, effectType.RESISTANCE_2});
+		ring_effects.add(new effectType[] {effectType.SPEED_1});
+		ring_effects.add(new effectType[] {effectType.SPEED_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_1});
+	}
+	
 	public static void init(File cFile)
 	{
 		configuration = new Configuration(cFile);
@@ -160,6 +209,10 @@ public final class WCLConfig
 		String[] sword_names1 = configuration.getStringList("sword_names", "names", sword_names, "Names for swords, must be " + WCLConstants.totalSwords);
 		if (sword_names1.length == WCLConstants.totalSwords)
 			sword_names = sword_names1;
+		
+		String[] ring_names1 = configuration.getStringList("ring_names", "names", ring_names, "Names for rings, must be 12");
+		if (ring_names1.length == 12)
+			ring_names = ring_names1;
 		
 		configuration.save();
 	}

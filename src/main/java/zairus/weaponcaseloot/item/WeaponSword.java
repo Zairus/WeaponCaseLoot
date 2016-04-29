@@ -27,7 +27,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
-import zairus.weaponcaseloot.states.WCLAchievementList;
 
 public class WeaponSword extends WCLItemWeapon
 {
@@ -206,15 +205,18 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int i1, boolean b1)
 	{
-		if (stack.hasDisplayName())
-		{
-			String name = stack.getDisplayName();
-			
-			char fChar = name.charAt(0);
-			if (fChar != WCLConstants.colorChar && (fChar == 'b' || fChar == 'a' || fChar == 'e' || fChar == '6'))
-				stack.setStackDisplayName(WCLConstants.colorChar + name);
-		}
+		stack = WCLItem.correctNameColor(stack);
 		
+		if (stack.hasTagCompound())
+		{
+			NBTTagCompound tag = stack.getTagCompound();
+			if (tag.hasKey(WCLConstants.KEY_LOOPSOUNDTIMER))
+			{
+				int id = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
+				stack = WCLItem.loop(stack, "Weapon Sword", "blade", WCLConfig.sword_rarity, world, entity, (id > 11)? 12 : 0, (id > 11)? 24 : 12);
+			}
+		}
+		/*
 		if (stack.hasTagCompound())
 		{
 			NBTTagCompound tag = stack.getTagCompound();
@@ -258,6 +260,7 @@ public class WeaponSword extends WCLItemWeapon
 				}
 			}
 		}
+		*/
 	}
 	
 	@Override
@@ -379,6 +382,16 @@ public class WeaponSword extends WCLItemWeapon
 		
 		if (tag != null && !(tag.hasKey("temp_looping")))
 		{
+			if (tag.hasKey(WCLConstants.KEY_WEAPONINDEX))
+			{
+				int wIndex = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
+				
+				if (wIndex < 12)
+					list.add("First edition sword.");
+				else
+					list.add("Second edition sword.");
+			}
+			
 			if (tag.hasKey(WCLConstants.KEY_STATE))
 				list.add("Quality: " + tag.getString(WCLConstants.KEY_STATE));
 			
