@@ -101,6 +101,23 @@ public class WeaponCase extends WCLItem
 			}
 		}
 		
+		if (stack.getItemDamage() == 2)
+		{
+			int bowId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
+			
+			ItemStack bow = WCLItems.bow.getFromId(bowId, quality);
+			
+			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+			
+			player.inventory.decrStackSize(player.inventory.currentItem, 1);
+			
+			if (!player.inventory.addItemStackToInventory(bow))
+			{
+				if (!world.isRemote)
+					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, bow));
+			}
+		}
+		
 		if (stack.getItemDamage() == 3 && WeaponCaseLoot.baublesExist())
 		{
 			int ringId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);

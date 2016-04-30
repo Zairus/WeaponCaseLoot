@@ -32,4 +32,19 @@
 			,{"name": "power4", "stream": false}
 		]
 	}
+	,"draw": {
+		"category": "master"
+		,"sounds": [
+			{"name": "longbow_draw_1", "stream": false}
+		]
+	}
+	,"bow_open": {
+		"category": "master"
+		,"sounds": [
+			{"name": "bow_open1", "stream": false}
+			,{"name": "bow_open2", "stream": false}
+			,{"name": "bow_open3", "stream": false}
+			,{"name": "bow_open4", "stream": false}
+		]
+	}
 }

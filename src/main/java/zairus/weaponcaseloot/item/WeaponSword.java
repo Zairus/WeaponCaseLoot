@@ -216,51 +216,6 @@ public class WeaponSword extends WCLItemWeapon
 				stack = WCLItem.loop(stack, "Weapon Sword", "blade", WCLConfig.sword_rarity, world, entity, (id > 11)? 12 : 0, (id > 11)? 24 : 12);
 			}
 		}
-		/*
-		if (stack.hasTagCompound())
-		{
-			NBTTagCompound tag = stack.getTagCompound();
-			
-			if (tag.hasKey(WCLConstants.KEY_LOOPSOUNDTIMER))
-			{
-				tag.setInteger("temp_looping", 1);
-				
-				float t = tag.getFloat(WCLConstants.KEY_LOOPSOUNDTIMER);
-				int iconIndex = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
-				
-				if (!tag.hasKey("temp_index"))
-				{
-					tag.setInteger("temp_index", iconIndex);
-					tag.setString("temp_name", stack.getDisplayName());
-					stack.setStackDisplayName("Weapon Sword");
-				}
-				
-				if (t < 95.0F)
-					world.playSoundAtEntity(entity, "weaponcaseloot:weapon_loop", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-				
-				--t;
-				
-				tag.setFloat(WCLConstants.KEY_LOOPSOUNDTIMER, t);
-				tag.setInteger(WCLConstants.KEY_WEAPONINDEX, itemRand.nextInt(WCLConstants.totalSwords));
-				
-				if (t <= 10.0F)
-				{
-					int rarity = WCLConfig.sword_rarity[tag.getInteger("temp_index")];
-					
-					if (rarity == 3)
-						((EntityPlayer)entity).triggerAchievement(WCLAchievementList.legendary);
-					
-					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
-					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
-					tag.removeTag("temp_index");
-					stack.setStackDisplayName(tag.getString("temp_name"));
-					tag.removeTag("temp_name");
-					tag.removeTag("temp_looping");
-					world.playSoundAtEntity(entity, "weaponcaseloot:blade", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-				}
-			}
-		}
-		*/
 	}
 	
 	@Override
@@ -418,7 +373,7 @@ public class WeaponSword extends WCLItemWeapon
 		return HashMultimap.create();
 	}
 	
-	private int getWeaponDurability(int wState, int wRarity)
+	public static int getWeaponDurability(int wState, int wRarity)
 	{
 		int durability = 0;
 		
@@ -507,7 +462,7 @@ public class WeaponSword extends WCLItemWeapon
 		return durability;
 	}
 	
-	private float getWeaponDamage(int wState, int wRarity)
+	public static float getWeaponDamage(int wState, int wRarity)
 	{
 		float damage = 0;
 		

@@ -13,6 +13,7 @@ public class WCLItems
 	public static WCLItem weaponcase;
 	
 	public static WCLItemWeapon sword;
+	public static WeaponBow bow;
 	
 	public static WCLItem bauble;
 	
@@ -21,6 +22,7 @@ public class WCLItems
 		weaponcase = new WeaponCase().setUnlocalizedName("weaponcase").setTextureName(WCLConstants.MOD_ID + ":weaponcase");
 		
 		sword = new WeaponSword().setDurability(WCLConfig.durability_common_broken).setAttackDamage(WCLConfig.damage_common_broken).setUnlocalizedName("weaponsword").setTextureName(WCLConstants.MOD_ID + ":weaponsword_1");
+		bow = new WeaponBow().setDurability(WCLConfig.durability_common_broken).setUnlocalizedName("weaponbow").setTextureName(WCLConstants.MOD_ID + ":weaponbow_1");
 		
 		if (WeaponCaseLoot.baublesExist())
 		{
@@ -32,6 +34,7 @@ public class WCLItems
 	{
 		GameRegistry.registerItem(weaponcase, weaponcase.getUnlocalizedName());
 		GameRegistry.registerItem(sword, sword.getUnlocalizedName());
+		GameRegistry.registerItem(bow, bow.getUnlocalizedName());
 		
 		if (bauble != null)
 		{

@@ -2,12 +2,15 @@ package zairus.weaponcaseloot;
 
 import org.apache.logging.log4j.Logger;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.common.MinecraftForge;
+import zairus.weaponcaseloot.event.WCLEventHandler;
 import zairus.weaponcaseloot.proxy.CommonProxy;
 import zairus.weaponcaseloot.states.WCLAchievementList;
 
@@ -36,6 +39,11 @@ public class WeaponCaseLoot
 	public void init(FMLInitializationEvent event)
 	{
 		WeaponCaseLoot.proxy.init(event);
+		
+		WCLEventHandler eventHandler = new WCLEventHandler();
+		
+		FMLCommonHandler.instance().bus().register(eventHandler);
+		MinecraftForge.EVENT_BUS.register(eventHandler);
 		
 		WCLAchievementList.initPages();
 	}

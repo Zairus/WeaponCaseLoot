@@ -113,6 +113,51 @@ public final class WCLConfig
 			,3
 			,1};
 	
+	public static String[] bow_names = {
+			"Long Bow"
+			,"Venom"
+			,"Nat Bow"
+			,"Black Widow"
+			,"Eagle"
+			,"Drawling"
+			,"Zach"
+			,"Slimestrike"
+			,"Thunderforce"
+			,"Ghost"
+			,"Angel"
+			,"Starshot"
+	};
+	
+	public static int[] bow_rarity = {
+			0
+			,1
+			,1
+			,2
+			,1
+			,0
+			,3
+			,0
+			,0
+			,2
+			,0
+			,0
+	};
+	
+	public static float[] bow_drawspeed = {
+			1.2f
+			,1.5f
+			,1.5f
+			,1.8f
+			,1.5f
+			,1.2f
+			,2.2f
+			,1.2f
+			,1.2f
+			,1.8f
+			,1.2f
+			,1.2f
+	};
+	
 	public static String[] ring_names = {
 			"The Pearl"
 			,"Fire Stone"
@@ -209,6 +254,10 @@ public final class WCLConfig
 		String[] sword_names1 = configuration.getStringList("sword_names", "names", sword_names, "Names for swords, must be " + WCLConstants.totalSwords);
 		if (sword_names1.length == WCLConstants.totalSwords)
 			sword_names = sword_names1;
+		
+		String[] bow_names1 = configuration.getStringList("bow_names", "names", bow_names, "Names for bows, must be 12");
+		if (bow_names1.length == 12)
+			bow_names = bow_names1;
 		
 		String[] ring_names1 = configuration.getStringList("ring_names", "names", ring_names, "Names for rings, must be 12");
 		if (ring_names1.length == 12)
