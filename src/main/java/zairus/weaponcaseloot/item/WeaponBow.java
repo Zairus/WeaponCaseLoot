@@ -25,16 +25,17 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
+import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WeaponBow extends ItemBow
 {
-	public static final String[] bowPullIconNameArray = new String[] {"", "_pulling_0", "_pulling_1", "_pulling_2"};
+	private static final String[] bowPullIconNameArray = new String[] {"", "_pulling_0", "_pulling_1", "_pulling_2"};
 	
 	private List<IIcon[]> bowIcons = new ArrayList<IIcon[]>();
 	
 	public WeaponBow()
 	{
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(WeaponCaseLoot.creativeTab);
 		this.setFull3D();
 		this.setMaxStackSize(1);
 	}
@@ -133,50 +134,57 @@ public class WeaponBow extends ItemBow
 				f = 1.0F;
 			}
 			
-			EntityArrow entityarrow = new EntityArrow(world, player, f * 2.0F);
-			
-			if (f == 1.0F)
-            {
-                entityarrow.setIsCritical(true);
-            }
-			
 			int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, stack);
-			
-			if (k > 0)
-            {
-                entityarrow.setDamage(entityarrow.getDamage() + (double)k * 0.5D + 0.5D);
-            }
-			
 			int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, stack);
+			int m = EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack);
 			
-			if (l > 0)
-            {
-                entityarrow.setKnockbackStrength(l + 1);
-            }
+			int s = 0;
 			
-			if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, stack) > 0)
-            {
-                entityarrow.setFire(100);
-            }
+			NBTTagCompound tag = stack.getTagCompound();
 			
-			stack.damageItem(1, player);
+			if (tag.hasKey(WCLConstants.KEY_WEAPON_MULTI))
+			{
+				s = tag.getInteger(WCLConstants.KEY_WEAPON_MULTI);
+			}
+			
+			if (s == 0)
+				s = 1;
+			
+			for (int i = 0; i < s; ++i)
+			{
+				EntityArrow entityarrow = new EntityArrow(world, player, f * 2.0F);
+				
+				entityarrow.setThrowableHeading(
+						entityarrow.motionX
+						, entityarrow.motionY
+						, entityarrow.motionZ
+						, (f * 2.0F) + itemRand.nextFloat()
+						, 3.0F);
+				
+				if (f == 1.0F)
+					entityarrow.setIsCritical(true);
+				if (k > 0)
+					entityarrow.setDamage(entityarrow.getDamage() + (double)k * 0.5D + 0.5D);
+				if (l > 0)
+					entityarrow.setKnockbackStrength(l + 1);
+				if (m > 0)
+					entityarrow.setFire(100);
+				if (flag || i > 0)
+					entityarrow.canBePickedUp = 2;
+				
+				if (!world.isRemote)
+					world.spawnEntityInWorld(entityarrow);
+			}
 			
 			if (!world.isRemote)
 				world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 			
-			if (flag)
-			{
-				entityarrow.canBePickedUp = 2;
-			}
-			else
-			{
-				if (player.inventory.hasItem(Items.arrow))
-					player.inventory.consumeInventoryItem(Items.arrow);
-			}
+			if (!player.capabilities.isCreativeMode)
+				stack.damageItem(1, player);
 			
-			if (!world.isRemote)
+			if (!flag)
 			{
-				world.spawnEntityInWorld(entityarrow);
+				player.inventory.consumeInventoryItem(Items.arrow);
 			}
 		}
 	}
@@ -210,7 +218,7 @@ public class WeaponBow extends ItemBow
 	@SideOnly(Side.CLIENT)
     public IIcon getIconFromDamageForRenderPass(int damage, int pass)
     {
-		return this.getIconFromDamage(damage);
+		return this.getIconFromDamage(pass);
     }
 	
 	@Override
@@ -218,6 +226,8 @@ public class WeaponBow extends ItemBow
 	public void registerIcons(IIconRegister iconRegister)
 	{
 		this.itemIcon = iconRegister.registerIcon(this.getIconString());
+		
+		bowIcons = new ArrayList<IIcon[]>();
 		
 		for (int i = 0; i < 12; ++i)
 		{
@@ -321,6 +331,9 @@ public class WeaponBow extends ItemBow
 			
 			if (tag.hasKey(WCLConstants.KEY_WEAPON_SPEED))
 				list.add("Draw speed: " + tag.getFloat(WCLConstants.KEY_WEAPON_SPEED));
+			
+			if (tag.hasKey(WCLConstants.KEY_WEAPON_MULTI))
+				list.add("Multi: " + tag.getInteger(WCLConstants.KEY_WEAPON_MULTI));
 		}
     }
 	
@@ -386,6 +399,14 @@ public class WeaponBow extends ItemBow
 		weaponData.setInteger(WCLConstants.KEY_WEAPONINDEX, id);
 		weaponData.setInteger(WCLConstants.KEY_WEAPON_DURABILITY, WeaponSword.getWeaponDurability(quality, rarity));
 		weaponData.setFloat(WCLConstants.KEY_WEAPON_SPEED, WCLConfig.bow_drawspeed[id]);
+		
+		if (rarity > 1)
+		{
+			if (itemRand.nextInt(3 + rarity) > 1)
+			{
+				weaponData.setInteger(WCLConstants.KEY_WEAPON_MULTI, itemRand.nextInt(3) + 2);
+			}
+		}
 		
 		stack.setTagCompound(weaponData);
 		stack.setStackDisplayName(getNameFromId(id));

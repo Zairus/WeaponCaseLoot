@@ -19,6 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
+import zairus.weaponcaseloot.WeaponCaseLoot;
 import zairus.weaponcaseloot.effects.WCLEffectHandler;
 import zairus.weaponcaseloot.effects.WCLEffectHandler.effectType;
 
@@ -31,7 +32,7 @@ public class WCLItemBauble extends WCLItem implements IBauble
 	{
 		this.maxStackSize = 1;
 		
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(WeaponCaseLoot.creativeTab);
 	}
 	
 	@Override

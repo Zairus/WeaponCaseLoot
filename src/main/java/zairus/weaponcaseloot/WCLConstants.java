@@ -4,7 +4,7 @@ public class WCLConstants
 {
 	public static final String MOD_ID = "weaponcaseloot";
 	public static final String MOD_NAME = "Weapon Case Loot";
-	public static final String MOD_VERSION = "1.2.10";
+	public static final String MOD_VERSION = "1.2.12";
 	
 	public static final String MOD_COMMON_PROXY = "zairus.weaponcaseloot.proxy.CommonProxy";
 	public static final String MOD_CLIENT_PROXY = "zairus.weaponcaseloot.proxy.ClientProxy";
@@ -16,6 +16,7 @@ public class WCLConstants
 	public static final String KEY_WEAPONINDEX = "weapon_index";
 	public static final String KEY_LOOPSOUNDTIMER = "weapon_looptimer";
 	public static final String KEY_WEAPON_SPEED = "weapon_speed";
+	public static final String KEY_WEAPON_MULTI = "weapon_multi";
 	
 	public static final int totalSwords = 24;
 	

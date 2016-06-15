@@ -25,7 +25,7 @@ public class WeaponCase extends WCLItem
 	public WeaponCase()
 	{
 		this.maxStackSize = 64;
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(WeaponCaseLoot.creativeTab);
 		
 		this.setHasSubtypes(true);
 	}

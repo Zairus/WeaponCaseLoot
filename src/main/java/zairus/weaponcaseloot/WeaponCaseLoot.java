@@ -9,8 +9,11 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
 import zairus.weaponcaseloot.event.WCLEventHandler;
+import zairus.weaponcaseloot.item.WCLItems;
 import zairus.weaponcaseloot.proxy.CommonProxy;
 import zairus.weaponcaseloot.states.WCLAchievementList;
 
@@ -24,6 +27,14 @@ public class WeaponCaseLoot
 	
 	@Mod.Instance(WCLConstants.MOD_ID)
 	public static WeaponCaseLoot instance;
+	
+	public static CreativeTabs creativeTab = new CreativeTabs("weaponCaseLoot") {
+		@Override
+		public Item getTabIconItem()
+		{
+			return WCLItems.weaponcase;
+		}
+	};
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event)

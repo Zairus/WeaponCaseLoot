@@ -27,6 +27,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
+import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WeaponSword extends WCLItemWeapon
 {
@@ -40,7 +41,7 @@ public class WeaponSword extends WCLItemWeapon
 		this.swordMaterial = Item.ToolMaterial.EMERALD;
 		this.maxStackSize = 1;
 		
-		this.setCreativeTab(CreativeTabs.tabCombat);
+		this.setCreativeTab(WeaponCaseLoot.creativeTab);
 	}
 	
 	public WeaponSword setDurability(int durability)
