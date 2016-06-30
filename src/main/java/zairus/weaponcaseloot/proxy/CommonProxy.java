@@ -5,9 +5,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import zairus.weaponcaseloot.item.WCLItemBauble;
 import zairus.weaponcaseloot.item.WCLItemWeapon;
-import zairus.weaponcaseloot.item.WeaponBow;
 
 public class CommonProxy
 {
@@ -35,15 +33,5 @@ public class CommonProxy
 	public void registerSwordItem(WCLItemWeapon sword, String name)
 	{
 		GameRegistry.registerItem(sword, name);
-	}
-	
-	public void registerBowItem(WeaponBow bow, String name)
-	{
-		GameRegistry.registerItem(bow, name);
-	}
-	
-	public void registerBaubleItem(WCLItemBauble bauble, String name)
-	{
-		GameRegistry.registerItem(bauble, name);
 	}
 }

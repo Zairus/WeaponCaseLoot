@@ -8,25 +8,29 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
-import zairus.weaponcaseloot.WeaponCaseLoot;
+import zairus.weaponcaseloot.sounds.WCLSoundEvents;
 
 public class WeaponCase extends WCLItem
 {
-	public static int editions = 4;
+	public static int editions = 2;
 	private final String name = "weaponcase";
 	
 	public WeaponCase()
 	{
 		setUnlocalizedName(name);
-		maxStackSize = 64;
-		setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
+		setCreativeTab(CreativeTabs.COMBAT);
 		
 		setHasSubtypes(true);
+		maxStackSize = 16;
 	}
 	
 	@Override
@@ -46,7 +50,8 @@ public class WeaponCase extends WCLItem
 		}
     }
 	
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
 	{
 		int chance = itemRand.nextInt(100);
 		int level;
@@ -62,60 +67,30 @@ public class WeaponCase extends WCLItem
 			level = 3;
 		}
 		
+		int swordId = getSwordIdFromRarity(stack, level);
 		int quality = world.rand.nextInt(5);
 		
-		if (stack.getItemDamage() < 2)
+		ItemStack weapon = ((WeaponSword)WCLItems.sword).getSwordFromId(swordId, quality);
+		
+		world.playSound(
+				(EntityPlayer)null, 
+				player.posX, 
+				player.posY, 
+				player.posZ, 
+				WCLSoundEvents.case_open, 
+				SoundCategory.NEUTRAL, 
+				1.0F, 
+				1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+		
+		player.inventory.decrStackSize(player.inventory.currentItem, 1);
+		
+		if (!player.inventory.addItemStackToInventory(weapon))
 		{
-			int swordId = getSwordIdFromRarity(stack, level);
-			
-			ItemStack weapon = ((WeaponSword)WCLItems.sword).getSwordFromId(swordId, quality);
-			
-			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
-			
-			if (!player.inventory.addItemStackToInventory(weapon))
-			{
-				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
-			}
+			if (!world.isRemote)
+				world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
 		}
 		
-		if (stack.getItemDamage() == 2)
-		{
-			int bowId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
-			
-			ItemStack bow = WCLItems.bow.getFromId(bowId, quality);
-			
-			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
-			
-			if (!player.inventory.addItemStackToInventory(bow))
-			{
-				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, bow));
-			}
-		}
-		
-		if (stack.getItemDamage() == 3 && WeaponCaseLoot.baublesExist())
-		{
-			int ringId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
-			
-			ItemStack ring = WCLItems.bauble.getRingFromId(ringId, quality);
-			
-			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
-			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
-			
-			if (!player.inventory.addItemStackToInventory(ring))
-			{
-				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ring));
-			}
-		}
-		
-		return stack;
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 	
 	private int getSwordIdFromRarity(ItemStack stack, int rarity)
@@ -130,6 +105,7 @@ public class WeaponCase extends WCLItem
 		
 		int edition = stack.getItemDamage();
 		
+		//WCLConstants.totalSwords
 		for (int i = 0 + (edition * 12); i < 12 * (edition + 1); ++i)
 		{
 			r.get(WCLConfig.sword_rarity[i]).add(i);

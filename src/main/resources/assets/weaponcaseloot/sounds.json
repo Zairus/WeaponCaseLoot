@@ -2,49 +2,25 @@
 	"case_open": {
 		"category": "master"
 		,"sounds": [
-			{"name": "case_open1", "stream": false}
-			,{"name": "case_open2", "stream": false}
-			,{"name": "case_open3", "stream": false}
-			,{"name": "case_open4", "stream": false}
-			,{"name": "case_open5", "stream": false}
+			{"name": "weaponcaseloot:case_open1", "stream": false}
+			,{"name": "weaponcaseloot:case_open2", "stream": false}
+			,{"name": "weaponcaseloot:case_open3", "stream": false}
+			,{"name": "weaponcaseloot:case_open4", "stream": false}
+			,{"name": "weaponcaseloot:case_open5", "stream": false}
 		]
 	}
 	,"weapon_loop": {
 		"category": "master"
 		,"sounds": [
-			{"name": "weapon_loop1", "stream": false}
+			{"name": "weaponcaseloot:weapon_loop1", "stream": false}
 		]
 	}
 	,"blade": {
 		"category": "master"
 		,"sounds": [
-			{"name": "blade1", "stream": false}
-			,{"name": "blade2", "stream": false}
-			,{"name": "blade3", "stream": false}
-		]
-	}
-	,"power": {
-		"category": "master"
-		,"sounds": [
-			{"name": "power1", "stream": false}
-			,{"name": "power2", "stream": false}
-			,{"name": "power3", "stream": false}
-			,{"name": "power4", "stream": false}
-		]
-	}
-	,"draw": {
-		"category": "master"
-		,"sounds": [
-			{"name": "longbow_draw_1", "stream": false}
-		]
-	}
-	,"bow_open": {
-		"category": "master"
-		,"sounds": [
-			{"name": "bow_open1", "stream": false}
-			,{"name": "bow_open2", "stream": false}
-			,{"name": "bow_open3", "stream": false}
-			,{"name": "bow_open4", "stream": false}
+			{"name": "weaponcaseloot:blade1", "stream": false}
+			,{"name": "weaponcaseloot:blade2", "stream": false}
+			,{"name": "weaponcaseloot:blade3", "stream": false}
 		]
 	}
 }

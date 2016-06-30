@@ -7,7 +7,7 @@ import zairus.weaponcaseloot.item.WCLItems;
 
 public class WCLAchievementList
 {
-	public static Achievement legendary = new Achievement(WCLConstants.MOD_ID + ":" + "achievement.legendary", "legendary", 0, 0, WCLItems.weaponcase, (Achievement)null).initIndependentStat().registerStat();
+	public static Achievement legendary = new Achievement(WCLConstants.MOD_ID + ":" + "achievement.legendary", "legendary", 0, 0, WCLItems.sword, (Achievement)null).initIndependentStat().registerStat();
 	
 	public static AchievementPage WCLPage1 = new AchievementPage("Weapon Case Loot", legendary);
 	

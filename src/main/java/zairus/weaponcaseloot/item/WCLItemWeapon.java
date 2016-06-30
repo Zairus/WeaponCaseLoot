@@ -7,7 +7,7 @@ public class WCLItemWeapon extends ItemSword
 {
 	public WCLItemWeapon()
 	{
-		super(Item.ToolMaterial.EMERALD);
+		super(Item.ToolMaterial.DIAMOND);
 	}
 	
 	@Override

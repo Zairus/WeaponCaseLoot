@@ -5,29 +5,28 @@ import java.util.List;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.EnumAction;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
-import zairus.weaponcaseloot.WeaponCaseLoot;
-import zairus.weaponcaseloot.stats.WCLAchievementList;
+import zairus.weaponcaseloot.sounds.WCLSoundEvents;
 
 public class WeaponSword extends WCLItemWeapon
 {
@@ -39,9 +38,9 @@ public class WeaponSword extends WCLItemWeapon
 	public WeaponSword()
 	{
 		setUnlocalizedName(name);
-		setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
+		setCreativeTab(CreativeTabs.COMBAT);
 		
-		this.swordMaterial = Item.ToolMaterial.EMERALD;
+		this.swordMaterial = Item.ToolMaterial.DIAMOND;
 		this.maxStackSize = 1;
 	}
 	
@@ -111,16 +110,16 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack stack, Block block)
+	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-		if (block == Blocks.web)
+		if (state == Blocks.WEB.getDefaultState())
 		{
 			return 15.0F;
 		}
 		else
 		{
-			Material material = block.getMaterial();
-            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
+			Material material = state.getMaterial();
+            return material != Material.PLANTS && material != Material.VINE && material != Material.CORAL && material != Material.LEAVES && material != Material.GOURD ? 1.0F : 1.5F;
 		}
 	}
 	
@@ -137,7 +136,7 @@ public class WeaponSword extends WCLItemWeapon
 		}
 		
 		boolean isCrit = (holder.fallDistance > 0.2F);
-		attackDamage += EnchantmentHelper.func_152377_a(stack, ((EntityLivingBase)enemy).getCreatureAttribute());
+		attackDamage += EnchantmentHelper.getModifierForCreature(stack, ((EntityLivingBase)enemy).getCreatureAttribute());
 		
 		if (isCrit)
 			attackDamage *= 1.2;
@@ -166,9 +165,9 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
-	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player)
+	public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase player)
 	{
-		if ((double) block.getBlockHardness(world, pos) != 0.0D)
+		if ((double) state.getBlock().getBlockHardness(state, world, pos) != 0.0D)
 		{
 			stack.damageItem(2, player);
 		}
@@ -183,28 +182,15 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
-	public EnumAction getItemUseAction(ItemStack stack)
-	{
-		return EnumAction.BLOCK;
-	}
-	
-	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
 	{
 		return 72000;
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
+	public boolean canHarvestBlock(IBlockState state)
 	{
-		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
-		return stack;
-	}
-	
-	@Override
-	public boolean canHarvestBlock(Block block)
-	{
-		return block == Blocks.web;
+		return state.getBlock() == Blocks.WEB;
 	}
 	
 	@Override
@@ -261,7 +247,15 @@ public class WeaponSword extends WCLItemWeapon
 				}
 				
 				if (t < 95.0F)
-					world.playSoundAtEntity(entity, "weaponcaseloot:weapon_loop", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+					world.playSound(
+							(EntityPlayer)null, 
+							entity.posX, 
+							entity.posY, 
+							entity.posZ, 
+							WCLSoundEvents.weapon_loop, 
+							SoundCategory.NEUTRAL, 
+							1.0F, 
+							1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 				
 				--t;
 				
@@ -270,18 +264,27 @@ public class WeaponSword extends WCLItemWeapon
 				
 				if (t <= 10.0F)
 				{
-					int rarity = WCLConfig.sword_rarity[tag.getInteger("temp_index")];
-					
+					//int rarity = WCLConfig.sword_rarity[tag.getInteger("temp_index")];
+					/*
 					if (rarity == 3)
 						((EntityPlayer)entity).triggerAchievement(WCLAchievementList.legendary);
-					
+					*/
 					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
 					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
 					tag.removeTag("temp_index");
 					stack.setStackDisplayName(tag.getString("temp_name"));
 					tag.removeTag("temp_name");
 					tag.removeTag("temp_looping");
-					world.playSoundAtEntity(entity, "weaponcaseloot:blade", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+					
+					world.playSound(
+							(EntityPlayer)null, 
+							entity.posX, 
+							entity.posY, 
+							entity.posZ, 
+							WCLSoundEvents.blade, 
+							SoundCategory.NEUTRAL, 
+							1.0F, 
+							1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 				}
 			}
 		}
@@ -360,7 +363,7 @@ public class WeaponSword extends WCLItemWeapon
 			if (tag.hasKey(WCLConstants.KEY_WEAPON_ATTACKDAMAGE))
 			{
 				float attackDamage = tag.getFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE);
-				int sLev = EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
+				int sLev = 1;//EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
 				
 				if (sLev > 0)
 					attackDamage += sLev + 1;
@@ -372,12 +375,12 @@ public class WeaponSword extends WCLItemWeapon
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Multimap getItemAttributeModifiers()
+	public Multimap getItemAttributeModifiers(EntityEquipmentSlot slot)
 	{
 		return HashMultimap.create();
 	}
 	
-	public static int getWeaponDurability(int wState, int wRarity)
+	private int getWeaponDurability(int wState, int wRarity)
 	{
 		int durability = 0;
 		
@@ -466,7 +469,7 @@ public class WeaponSword extends WCLItemWeapon
 		return durability;
 	}
 	
-	public static float getWeaponDamage(int wState, int wRarity)
+	private float getWeaponDamage(int wState, int wRarity)
 	{
 		float damage = 0;
 		
