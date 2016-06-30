@@ -2,7 +2,6 @@ package zairus.weaponcaseloot.item;
 
 import java.util.List;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.material.Material;
@@ -11,6 +10,8 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -167,7 +168,7 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase player)
 	{
-		if ((double) state.getBlock().getBlockHardness(state, world, pos) != 0.0D)
+		if ((double) state.getBlockHardness(world, pos) != 0.0D)
 		{
 			stack.damageItem(2, player);
 		}
@@ -363,7 +364,7 @@ public class WeaponSword extends WCLItemWeapon
 			if (tag.hasKey(WCLConstants.KEY_WEAPON_ATTACKDAMAGE))
 			{
 				float attackDamage = tag.getFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE);
-				int sLev = 1;//EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
+				int sLev = 1;
 				
 				if (sLev > 0)
 					attackDamage += sLev + 1;
@@ -373,11 +374,20 @@ public class WeaponSword extends WCLItemWeapon
 		}
     }
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Multimap getItemAttributeModifiers(EntityEquipmentSlot slot)
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
 	{
-		return HashMultimap.create();
+		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+		
+		if (equipmentSlot == EntityEquipmentSlot.MAINHAND)
+		{
+			float attackDamage = this.swordDamage;
+			
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", (double)attackDamage, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.4000000953674316D, 0));
+		}
+		
+		return multimap;
 	}
 	
 	private int getWeaponDurability(int wState, int wRarity)
