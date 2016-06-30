@@ -3,10 +3,6 @@
 /eclipse/
 /build/
 /__wfiles/
-/.classpath
-/.project
-/.settings/
-/library/
 
 /libs/
 /build.bat
