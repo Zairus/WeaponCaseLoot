@@ -5,11 +5,8 @@ import java.util.List;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -21,27 +18,36 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
 import zairus.weaponcaseloot.WeaponCaseLoot;
+import zairus.weaponcaseloot.stats.WCLAchievementList;
 
 public class WeaponSword extends WCLItemWeapon
 {
 	private float swordDamage;
 	private final Item.ToolMaterial swordMaterial;
 	
-	private IIcon[] icons;
+	private final String name = "weaponsword";
 	
 	public WeaponSword()
 	{
+		setUnlocalizedName(name);
+		setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
+		
 		this.swordMaterial = Item.ToolMaterial.EMERALD;
 		this.maxStackSize = 1;
-		
-		this.setCreativeTab(WeaponCaseLoot.creativeTab);
+	}
+	
+	public String getName()
+	{
+		return name;
 	}
 	
 	public WeaponSword setDurability(int durability)
@@ -60,6 +66,20 @@ public class WeaponSword extends WCLItemWeapon
 	public String getUnlocalizedName()
 	{
 		return super.getUnlocalizedName();
+	}
+	
+	@Override
+	public int getMetadata(ItemStack stack)
+	{
+		int meta = 0;
+		
+		if (stack.hasTagCompound())
+		{
+			if (stack.getTagCompound().hasKey(WCLConstants.KEY_WEAPONINDEX))
+				meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
+		}
+		
+		return meta;
 	}
 	
 	@Override
@@ -84,12 +104,14 @@ public class WeaponSword extends WCLItemWeapon
 		return maxDamage;
 	}
 	
-	public float func_150931_i()
+	@Override
+	public float getDamageVsEntity()
 	{
 		return this.swordMaterial.getDamageVsEntity();
 	}
 	
-	public float func_150893_a(ItemStack stack, Block block)
+	@Override
+	public float getStrVsBlock(ItemStack stack, Block block)
 	{
 		if (block == Blocks.web)
 		{
@@ -98,7 +120,7 @@ public class WeaponSword extends WCLItemWeapon
 		else
 		{
 			Material material = block.getMaterial();
-			return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
+            return material != Material.plants && material != Material.vine && material != Material.coral && material != Material.leaves && material != Material.gourd ? 1.0F : 1.5F;
 		}
 	}
 	
@@ -115,13 +137,13 @@ public class WeaponSword extends WCLItemWeapon
 		}
 		
 		boolean isCrit = (holder.fallDistance > 0.2F);
-		attackDamage += EnchantmentHelper.getEnchantmentModifierLiving(holder, (EntityLivingBase) enemy);
+		attackDamage += EnchantmentHelper.func_152377_a(stack, ((EntityLivingBase)enemy).getCreatureAttribute());
 		
 		if (isCrit)
 			attackDamage *= 1.2;
 		
 		int i = 0;
-		i += EnchantmentHelper.getKnockbackModifier(holder, (EntityLivingBase) enemy);
+		i += EnchantmentHelper.getKnockbackModifier(holder);
 		
 		boolean flag = enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)holder), attackDamage);
 		
@@ -138,17 +160,15 @@ public class WeaponSword extends WCLItemWeapon
 		if (j > 0)
 			enemy.setFire(j * 4);
 		
-		EnchantmentHelper.func_151384_a(enemy, holder);
-		EnchantmentHelper.func_151385_b(holder, enemy);
-		
 		stack.damageItem(1, enemy);
 		
 		return flag;
 	}
 	
-	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, int x, int y, int z, EntityLivingBase player)
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World world, Block block, BlockPos pos, EntityLivingBase player)
 	{
-		if ((double) block.getBlockHardness(world, x, y, z) != 0.0D)
+		if ((double) block.getBlockHardness(world, pos) != 0.0D)
 		{
 			stack.damageItem(2, player);
 		}
@@ -162,37 +182,44 @@ public class WeaponSword extends WCLItemWeapon
 		return true;
 	}
 	
+	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
 	{
-		return EnumAction.block;
+		return EnumAction.BLOCK;
 	}
 	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
 	{
 		return 72000;
 	}
 	
+	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
 	{
 		player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
 		return stack;
 	}
 	
-	public boolean func_150897_b(Block block)
+	@Override
+	public boolean canHarvestBlock(Block block)
 	{
 		return block == Blocks.web;
 	}
 	
+	@Override
 	public int getItemEnchantability()
 	{
 		return Item.ToolMaterial.GOLD.getEnchantability();
 	}
 	
+	@Override
 	public String getToolMaterialName()
 	{
 		return this.swordMaterial.toString();
 	}
 	
+	@Override
 	public boolean getIsRepairable(ItemStack stack, ItemStack source)
 	{
 		ItemStack mat = this.swordMaterial.getRepairItemStack();
@@ -206,15 +233,56 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int i1, boolean b1)
 	{
-		stack = WCLItem.correctNameColor(stack);
+		if (stack.hasDisplayName())
+		{
+			String name = stack.getDisplayName();
+			
+			char fChar = name.charAt(0);
+			if (fChar != WCLConstants.colorChar && (fChar == 'b' || fChar == 'a' || fChar == 'e' || fChar == '6'))
+				stack.setStackDisplayName(WCLConstants.colorChar + name);
+		}
 		
 		if (stack.hasTagCompound())
 		{
 			NBTTagCompound tag = stack.getTagCompound();
+			
 			if (tag.hasKey(WCLConstants.KEY_LOOPSOUNDTIMER))
 			{
-				int id = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
-				stack = WCLItem.loop(stack, "Weapon Sword", "blade", WCLConfig.sword_rarity, world, entity, (id > 11)? 12 : 0, (id > 11)? 24 : 12);
+				tag.setInteger("temp_looping", 1);
+				
+				float t = tag.getFloat(WCLConstants.KEY_LOOPSOUNDTIMER);
+				int iconIndex = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
+				
+				if (!tag.hasKey("temp_index"))
+				{
+					tag.setInteger("temp_index", iconIndex);
+					tag.setString("temp_name", stack.getDisplayName());
+					stack.setStackDisplayName("Weapon Sword");
+				}
+				
+				if (t < 95.0F)
+					world.playSoundAtEntity(entity, "weaponcaseloot:weapon_loop", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+				
+				--t;
+				
+				tag.setFloat(WCLConstants.KEY_LOOPSOUNDTIMER, t);
+				tag.setInteger(WCLConstants.KEY_WEAPONINDEX, itemRand.nextInt(WCLConstants.totalSwords));
+				
+				if (t <= 10.0F)
+				{
+					int rarity = WCLConfig.sword_rarity[tag.getInteger("temp_index")];
+					
+					if (rarity == 3)
+						((EntityPlayer)entity).triggerAchievement(WCLAchievementList.legendary);
+					
+					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
+					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
+					tag.removeTag("temp_index");
+					stack.setStackDisplayName(tag.getString("temp_name"));
+					tag.removeTag("temp_name");
+					tag.removeTag("temp_looping");
+					world.playSoundAtEntity(entity, "weaponcaseloot:blade", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+				}
 			}
 		}
 	}
@@ -275,61 +343,6 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister)
-	{
-		icons = new IIcon[WCLConstants.totalSwords];
-		
-		for (int i = 0; i < WCLConstants.totalSwords; ++i)
-		{
-			icons[i] = iconRegister.registerIcon(WCLConstants.MOD_ID + ":weaponsword_" + (i + 1));
-		}
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int damage)
-    {
-		return icons[0];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack)
-    {
-		int iconIndex = 0;
-		
-		if (stack.hasTagCompound())
-		{
-			if (stack.getTagCompound().hasKey(WCLConstants.KEY_WEAPONINDEX))
-			{
-				iconIndex = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-			}
-		}
-		
-		return icons[iconIndex];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-		return this.getIconFromDamage(damage);
-    }
-	
-	@Override
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-	{
-		return this.getIcon(stack, renderPass);
-	}
-	
-	@Override
-	public IIcon getIcon(ItemStack stack, int pass)
-	{
-		return this.getIconIndex(stack);
-	}
-	
-	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b1)
@@ -338,16 +351,6 @@ public class WeaponSword extends WCLItemWeapon
 		
 		if (tag != null && !(tag.hasKey("temp_looping")))
 		{
-			if (tag.hasKey(WCLConstants.KEY_WEAPONINDEX))
-			{
-				int wIndex = tag.getInteger(WCLConstants.KEY_WEAPONINDEX);
-				
-				if (wIndex < 12)
-					list.add("First edition sword.");
-				else
-					list.add("Second edition sword.");
-			}
-			
 			if (tag.hasKey(WCLConstants.KEY_STATE))
 				list.add("Quality: " + tag.getString(WCLConstants.KEY_STATE));
 			
@@ -367,7 +370,7 @@ public class WeaponSword extends WCLItemWeapon
 		}
     }
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Multimap getItemAttributeModifiers()
 	{

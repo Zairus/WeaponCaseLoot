@@ -9,7 +9,7 @@ import net.minecraft.potion.PotionEffect;
 
 public class WCLEffectHandler
 {
-	public static final WCLEffectHandler instance = new WCLEffectHandler();
+public static final WCLEffectHandler instance = new WCLEffectHandler();
 	
 	public void applyEffect(EntityPlayer player, effectType effect, boolean add)
 	{
@@ -18,32 +18,8 @@ public class WCLEffectHandler
 		
 		if (add && effect.isPotion())
 		{
-			player.addPotionEffect(new PotionEffect(effect.getPotionId(), 2, effect.getLevel(), true));
+			player.addPotionEffect(new PotionEffect(effect.getPotionId(), 2, effect.getLevel(), true, false));
 		}
-		/*
-		IAttributeInstance curModifier = player.getAttributeMap().getAttributeInstanceByName(effect.getName());
-		
-		if (curModifier == null)
-		{
-			player.getAttributeMap().registerAttribute(new RangedAttribute(effect.getName(), 1.6, 0.0D, Double.MAX_VALUE).setDescription(effect.getDisplayName()));
-			curModifier = player.getAttributeMap().getAttributeInstanceByName(effect.getName());
-		}
-		
-		if (add)
-		{
-			if (curModifier.getModifier(effect.getModifier().getID()) == null)
-			{
-				curModifier.applyModifier(effect.getModifier());
-			}
-		}
-		else
-		{
-			if (curModifier.getModifier(effect.getModifier().getID()) != null)
-			{
-				curModifier.removeModifier(effect.getModifier());
-			}
-		}
-		*/
 	}
 	
 	public static enum effectType

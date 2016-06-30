@@ -1,4 +1,4 @@
-package zairus.weaponcaseloot.states;
+package zairus.weaponcaseloot.stats;
 
 import net.minecraft.stats.Achievement;
 import net.minecraftforge.common.AchievementPage;

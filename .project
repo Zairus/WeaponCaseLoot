@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>WeaponCaseLoot</name>
+	<name>WeaponCaseLoot-1.8</name>
 	<comment/>
 	<projects/>
 	<natures>
@@ -12,16 +12,5 @@
 			<arguments/>
 		</buildCommand>
 	</buildSpec>
-	<linkedResources>
-		<link>
-			<name>java</name>
-			<type>2</type>
-			<location>C:/Users/Paul/git/WeaponCaseLoot/src/main/java</location>
-		</link>
-		<link>
-			<name>resources</name>
-			<type>2</type>
-			<location>C:/Users/Paul/git/WeaponCaseLoot/src/main/resources</location>
-		</link>
-	</linkedResources>
+	<linkedResources/>
 </projectDescription>

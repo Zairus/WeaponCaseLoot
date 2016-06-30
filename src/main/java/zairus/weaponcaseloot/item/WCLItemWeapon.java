@@ -11,13 +11,6 @@ public class WCLItemWeapon extends ItemSword
 	}
 	
 	@Override
-	public WCLItemWeapon setTextureName(String texture)
-	{
-		super.setTextureName(texture);
-		return this;
-	}
-	
-	@Override
 	public WCLItemWeapon setUnlocalizedName(String name)
 	{
 		super.setUnlocalizedName(name);

@@ -1,11 +1,11 @@
 package zairus.weaponcaseloot.event;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.item.WeaponBow;
 
 public class WCLEventHandler
@@ -31,7 +31,7 @@ public class WCLEventHandler
 	}
 	
 	@SideOnly(Side.CLIENT)
-	private float getItemInUsePercentaje(EntityPlayerSP player, float speedFactor)
+	private float getItemInUsePercentaje(EntityPlayer player, float speedFactor)
 	{
 		if (player.getItemInUse().getItem() instanceof WeaponBow)
 		{

@@ -7,17 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConstants;
-import zairus.weaponcaseloot.states.WCLAchievementList;
+import zairus.weaponcaseloot.stats.WCLAchievementList;
 
 public class WCLItem extends Item
 {
-	@Override
-	public WCLItem setTextureName(String texture)
-	{
-		super.setTextureName(texture);
-		return this;
-	}
-	
 	@Override
 	public WCLItem setUnlocalizedName(String name)
 	{

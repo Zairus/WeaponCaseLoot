@@ -3,46 +3,37 @@ package zairus.weaponcaseloot.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WeaponCase extends WCLItem
 {
 	public static int editions = 4;
-	private IIcon[] icons;
+	private final String name = "weaponcase";
 	
 	public WeaponCase()
 	{
-		this.maxStackSize = 64;
-		this.setCreativeTab(WeaponCaseLoot.creativeTab);
+		setUnlocalizedName(name);
+		maxStackSize = 64;
+		setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
 		
-		this.setHasSubtypes(true);
+		setHasSubtypes(true);
 	}
-	
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int damage)
-    {
-		int j = MathHelper.clamp_int(damage, 0, editions - 1);
-		
-		return icons[j];
-    }
 	
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
 		int i = MathHelper.clamp_int(stack.getItemDamage() + 1, 0, editions);
-		return super.getUnlocalizedName() + ((i > 1)? ("." + i) : "");
+		return super.getUnlocalizedName() + "" + i;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -52,17 +43,6 @@ public class WeaponCase extends WCLItem
 		for (int i = 0; i < editions; ++i)
 		{
 			list.add(new ItemStack(item, 1, i));
-		}
-    }
-	
-	@SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister)
-    {
-		icons = new IIcon[editions];
-		
-		for (int i = 0; i < editions; ++i)
-		{
-			this.icons[i] = iconRegister.registerIcon(this.getIconString() + ((i > 0)? ("." + (i + 1)) : ""));
 		}
     }
 	
@@ -122,7 +102,7 @@ public class WeaponCase extends WCLItem
 		{
 			int ringId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
 			
-			ItemStack ring = ((WCLItemBauble)WCLItems.bauble).getRingFromId(ringId, quality);
+			ItemStack ring = WCLItems.bauble.getRingFromId(ringId, quality);
 			
 			world.playSoundAtEntity(player, "weaponcaseloot:case_open", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
 			

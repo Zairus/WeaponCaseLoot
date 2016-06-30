@@ -1,11 +1,8 @@
 package zairus.weaponcaseloot.item;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -18,24 +15,23 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
 import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WeaponBow extends ItemBow
 {
-	private static final String[] bowPullIconNameArray = new String[] {"", "_pulling_0", "_pulling_1", "_pulling_2"};
-	
-	private List<IIcon[]> bowIcons = new ArrayList<IIcon[]>();
+	public static final String[] bowPullIconNameArray = new String[] {"", "_pulling_0", "_pulling_1", "_pulling_2"};
 	
 	public WeaponBow()
 	{
-		this.setCreativeTab(WeaponCaseLoot.creativeTab);
+		this.setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
 		this.setFull3D();
 		this.setMaxStackSize(1);
 	}
@@ -43,13 +39,6 @@ public class WeaponBow extends ItemBow
 	public WeaponBow setDurability(int durability)
 	{
 		this.setMaxDamage(durability);
-		return this;
-	}
-	
-	@Override
-	public WeaponBow setTextureName(String texture)
-	{
-		super.setTextureName(texture);
 		return this;
 	}
 	
@@ -82,7 +71,7 @@ public class WeaponBow extends ItemBow
 		return maxDamage;
 	}
 	
-	public float getDrawSpeed(ItemStack stack)
+	public static float getDrawSpeed(ItemStack stack)
 	{
 		float drawSpeed = 1.0f;
 		
@@ -96,6 +85,12 @@ public class WeaponBow extends ItemBow
 		}
 		
 		return drawSpeed;
+	}
+	
+	@Override
+	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
+	{
+		;
 	}
 	
 	@Override
@@ -179,13 +174,11 @@ public class WeaponBow extends ItemBow
 			if (!world.isRemote)
 				world.playSoundAtEntity(player, "random.bow", 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
 			
+			if (!flag)
+				player.inventory.consumeInventoryItem(Items.arrow);
+			
 			if (!player.capabilities.isCreativeMode)
 				stack.damageItem(1, player);
-			
-			if (!flag)
-			{
-				player.inventory.consumeInventoryItem(Items.arrow);
-			}
 		}
 	}
 	
@@ -215,104 +208,6 @@ public class WeaponBow extends ItemBow
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-		return this.getIconFromDamage(pass);
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister)
-	{
-		this.itemIcon = iconRegister.registerIcon(this.getIconString());
-		
-		bowIcons = new ArrayList<IIcon[]>();
-		
-		for (int i = 0; i < 12; ++i)
-		{
-			IIcon[] curIcons = new IIcon[bowPullIconNameArray.length];
-			
-			for (int j = 0; j < curIcons.length; ++j)
-			{
-				curIcons[j] = iconRegister.registerIcon(WCLConstants.MOD_ID + ":weaponbow_" + (i + 1) + bowPullIconNameArray[j]);
-			}
-			
-			bowIcons.add(curIcons);
-		}
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int damage)
-    {
-		return this.bowIcons.get(0)[0];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack)
-    {
-		int iconIndex = 0;
-		
-		if (stack.hasTagCompound())
-		{
-			if (stack.getTagCompound().hasKey(WCLConstants.KEY_WEAPONINDEX))
-			{
-				iconIndex = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-			}
-		}
-		
-		return this.bowIcons.get(iconIndex)[0];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int renderPass)
-	{
-		return this.itemIcon;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-	{
-		int iconIndex = 0;
-		
-		if (stack.hasTagCompound())
-		{
-			if (stack.getTagCompound().hasKey(WCLConstants.KEY_WEAPONINDEX))
-			{
-				iconIndex = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-			}
-		}
-		
-		IIcon[] passIcon = this.bowIcons.get(iconIndex);
-		
-		if (player.getItemInUse() == null)
-			return passIcon[0];
-		
-		int pulling = stack.getMaxItemUseDuration() - useRemaining;
-		
-		pulling = (int)((float)pulling * (1.0f + (getDrawSpeed(stack) / 1.0f)));
-		
-		if (pulling >= 25)
-		{
-			return passIcon[3];
-		}
-		else if (pulling > 15)
-		{
-			return passIcon[2];
-		}
-		else if (pulling > 2)
-		{
-			return passIcon[1];
-		}
-		
-		return passIcon[0];
-	}
-	
-	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b1)
@@ -338,12 +233,6 @@ public class WeaponBow extends ItemBow
     }
 	
 	@Override
-	public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
-	{
-		return stack;
-	}
-	
-	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
 	{
 		return 72000;
@@ -352,7 +241,7 @@ public class WeaponBow extends ItemBow
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
 	{
-		return EnumAction.bow;
+		return EnumAction.BOW;
 	}
 	
 	@Override
@@ -385,6 +274,15 @@ public class WeaponBow extends ItemBow
 				list.add(getFromId(i, q));
 			}
 		}
+    }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public net.minecraft.client.resources.model.ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining)
+    {
+		ModelResourceLocation resourceLocation = null; //new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponbow_1", "inventory");
+		
+		return resourceLocation;
     }
 	
 	public ItemStack getFromId(int id, int quality)

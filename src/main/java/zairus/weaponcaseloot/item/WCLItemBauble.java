@@ -4,10 +4,6 @@ import java.util.List;
 
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,8 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
 import zairus.weaponcaseloot.WeaponCaseLoot;
@@ -26,13 +24,12 @@ import zairus.weaponcaseloot.effects.WCLEffectHandler.effectType;
 @Optional.Interface( modid = "Baubles", iface = "baubles.api.IBauble" )
 public class WCLItemBauble extends WCLItem implements IBauble
 {
-	private IIcon[] icons;
-	
 	public WCLItemBauble()
 	{
 		this.maxStackSize = 1;
-		
-		this.setCreativeTab(WeaponCaseLoot.creativeTab);
+		this.setUnlocalizedName("baublering");
+		this.setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
+		this.setHasSubtypes(true);
 	}
 	
 	@Override
@@ -60,7 +57,7 @@ public class WCLItemBauble extends WCLItem implements IBauble
 	
 	public ItemStack getRingFromId(int ringId, int quality)
 	{
-		ItemStack ring = new ItemStack(WCLItems.bauble, 1);
+		ItemStack ring = new ItemStack(WCLItems.bauble, 1, 0);
 		int rarity = WCLConfig.ring_rarity[ringId];
 		NBTTagCompound weaponData = new NBTTagCompound();
 		
@@ -90,61 +87,6 @@ public class WCLItemBauble extends WCLItem implements IBauble
 		name = levels_colors[rarity] + WCLConfig.ring_names[ringId];
 		
 		return name;
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister)
-	{
-		icons = new IIcon[12];
-		
-		for (int i = 0; i < 12; ++i)
-		{
-			icons[i] = iconRegister.registerIcon(WCLConstants.MOD_ID + ":baublering_" + (i + 1));
-		}
-	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int damage)
-    {
-		return icons[0];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack)
-    {
-		int iconIndex = 0;
-		
-		if (stack.hasTagCompound())
-		{
-			if (stack.getTagCompound().hasKey(WCLConstants.KEY_WEAPONINDEX))
-			{
-				iconIndex = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-			}
-		}
-		
-		return icons[iconIndex];
-    }
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-		return this.getIconFromDamage(damage);
-    }
-	
-	@Override
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-	{
-		return this.getIcon(stack, renderPass);
-	}
-	
-	@Override
-	public IIcon getIcon(ItemStack stack, int pass)
-	{
-		return this.getIconIndex(stack);
 	}
 	
 	@Override

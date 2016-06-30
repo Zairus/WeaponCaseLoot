@@ -1,11 +1,8 @@
 package zairus.weaponcaseloot.item;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
-import zairus.weaponcaseloot.WCLConfig;
-import zairus.weaponcaseloot.WCLConstants;
 import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WCLItems
@@ -15,30 +12,33 @@ public class WCLItems
 	public static WCLItemWeapon sword;
 	public static WeaponBow bow;
 	
-	public static WCLItem bauble;
+	public static WCLItemBauble bauble;
 	
 	static
 	{
-		weaponcase = new WeaponCase().setUnlocalizedName("weaponcase").setTextureName(WCLConstants.MOD_ID + ":weaponcase");
-		
-		sword = new WeaponSword().setDurability(WCLConfig.durability_common_broken).setAttackDamage(WCLConfig.damage_common_broken).setUnlocalizedName("weaponsword").setTextureName(WCLConstants.MOD_ID + ":weaponsword_1");
-		bow = new WeaponBow().setDurability(WCLConfig.durability_common_broken).setUnlocalizedName("weaponbow").setTextureName(WCLConstants.MOD_ID + ":weaponbow_1");
+		weaponcase = new WeaponCase();
+		sword = new WeaponSword();
+		bow = new WeaponBow();
 		
 		if (WeaponCaseLoot.baublesExist())
 		{
-			bauble = new WCLItemBauble().setUnlocalizedName("bauble").setTextureName(WCLConstants.MOD_ID + ":baublering_1");
+			bauble = new WCLItemBauble();
 		}
 	}
 	
 	public static final void register()
 	{
-		GameRegistry.registerItem(weaponcase, weaponcase.getUnlocalizedName());
-		GameRegistry.registerItem(sword, sword.getUnlocalizedName());
-		GameRegistry.registerItem(bow, bow.getUnlocalizedName());
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase1", 0, true);
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase2", 1, true);
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase3", 2, true);
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase4", 3, true);
 		
-		if (bauble != null)
+		WeaponCaseLoot.proxy.registerSwordItem(sword, "weaponsword");
+		WeaponCaseLoot.proxy.registerBowItem(bow, "weaponbow");
+		
+		if (WeaponCaseLoot.baublesExist())
 		{
-			GameRegistry.registerItem(bauble, bauble.getUnlocalizedName());
+			WeaponCaseLoot.proxy.registerBaubleItem(bauble, "baublering");
 		}
 	}
 	
@@ -46,9 +46,6 @@ public class WCLItems
 	{
 		for (int i = 0; i < WeaponCase.editions; ++i)
 		{
-			if (i == 3 && !WeaponCaseLoot.baublesExist())
-				continue;
-			
 			ChestGenHooks.addItem(ChestGenHooks.PYRAMID_DESERT_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
 			ChestGenHooks.addItem(ChestGenHooks.BONUS_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
 			ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
@@ -58,6 +55,7 @@ public class WCLItems
 			ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_CROSSING, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
 			ChestGenHooks.addItem(ChestGenHooks.STRONGHOLD_LIBRARY, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
 			ChestGenHooks.addItem(ChestGenHooks.VILLAGE_BLACKSMITH, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
+			ChestGenHooks.addItem(ChestGenHooks.NETHER_FORTRESS, new WeightedRandomChestContent(new ItemStack(weaponcase, 1, i), 1, 5, 3));
 		}
 	}
 }

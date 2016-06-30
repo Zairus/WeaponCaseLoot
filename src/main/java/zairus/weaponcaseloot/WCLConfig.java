@@ -7,7 +7,7 @@ import java.util.List;
 import net.minecraftforge.common.config.Configuration;
 import zairus.weaponcaseloot.effects.WCLEffectHandler.effectType;
 
-public final class WCLConfig
+public class WCLConfig
 {
 	public static Configuration configuration;
 	
