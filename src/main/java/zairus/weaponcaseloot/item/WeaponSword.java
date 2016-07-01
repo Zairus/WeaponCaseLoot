@@ -15,10 +15,14 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -27,7 +31,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import zairus.weaponcaseloot.WCLConfig;
 import zairus.weaponcaseloot.WCLConstants;
-import zairus.weaponcaseloot.sounds.WCLSoundEvents;
+import zairus.weaponcaseloot.WeaponCaseLoot;
+import zairus.weaponcaseloot.sound.WCLSoundEvents;
 
 public class WeaponSword extends WCLItemWeapon
 {
@@ -39,7 +44,7 @@ public class WeaponSword extends WCLItemWeapon
 	public WeaponSword()
 	{
 		setUnlocalizedName(name);
-		setCreativeTab(CreativeTabs.COMBAT);
+		setCreativeTab(WeaponCaseLoot.weaponCaseLootTab);
 		
 		this.swordMaterial = Item.ToolMaterial.DIAMOND;
 		this.maxStackSize = 1;
@@ -113,7 +118,7 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state)
 	{
-		if (state == Blocks.WEB.getDefaultState())
+		if (state.getBlock() == Blocks.WEB)
 		{
 			return 15.0F;
 		}
@@ -183,9 +188,21 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
+	public EnumAction getItemUseAction(ItemStack stack)
+	{
+		return EnumAction.BLOCK;
+	}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
 	{
 		return 72000;
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	{
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
 	}
 	
 	@Override
@@ -364,7 +381,7 @@ public class WeaponSword extends WCLItemWeapon
 			if (tag.hasKey(WCLConstants.KEY_WEAPON_ATTACKDAMAGE))
 			{
 				float attackDamage = tag.getFloat(WCLConstants.KEY_WEAPON_ATTACKDAMAGE);
-				int sLev = 1;
+				int sLev = 1; //EnchantmentHelper.getEnchantmentLevel(Enchantment.sharpness.effectId, stack);
 				
 				if (sLev > 0)
 					attackDamage += sLev + 1;
@@ -390,7 +407,7 @@ public class WeaponSword extends WCLItemWeapon
 		return multimap;
 	}
 	
-	private int getWeaponDurability(int wState, int wRarity)
+	public static int getWeaponDurability(int wState, int wRarity)
 	{
 		int durability = 0;
 		
@@ -479,7 +496,7 @@ public class WeaponSword extends WCLItemWeapon
 		return durability;
 	}
 	
-	private float getWeaponDamage(int wState, int wRarity)
+	public static float getWeaponDamage(int wState, int wRarity)
 	{
 		float damage = 0;
 		

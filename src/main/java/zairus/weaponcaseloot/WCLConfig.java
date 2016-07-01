@@ -1,12 +1,15 @@
 package zairus.weaponcaseloot;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraftforge.common.config.Configuration;
+import zairus.weaponcaseloot.effects.WCLEffectHandler.effectType;
 
 public class WCLConfig
 {
-public static Configuration configuration;
+	public static Configuration configuration;
 	
 	public static int durability_common_broken = 490;
 	public static int durability_common_crude = 760;
@@ -110,6 +113,97 @@ public static Configuration configuration;
 			,3
 			,1};
 	
+	public static String[] bow_names = {
+			"Long Bow"
+			,"Venom"
+			,"Nat Bow"
+			,"Black Widow"
+			,"Eagle"
+			,"Drawling"
+			,"Zach"
+			,"Slimestrike"
+			,"Thunderforce"
+			,"Ghost"
+			,"Angel"
+			,"Starshot"
+	};
+	
+	public static int[] bow_rarity = {
+			0
+			,1
+			,1
+			,2
+			,1
+			,0
+			,3
+			,0
+			,0
+			,2
+			,0
+			,0
+	};
+	
+	public static float[] bow_drawspeed = {
+			1.2f
+			,1.5f
+			,1.5f
+			,1.8f
+			,1.5f
+			,1.2f
+			,2.2f
+			,1.2f
+			,1.2f
+			,1.8f
+			,1.2f
+			,1.2f
+	};
+	
+	public static String[] ring_names = {
+			"The Pearl"
+			,"Fire Stone"
+			,"Burning Stone"
+			,"The Ruby"
+			,"The Ruby Eye"
+			,"Hope"
+			,"Purity Hope"
+			,"The Onyx"
+			,"Jordan"
+			,"Breeze"
+			,"Wind"
+			,"The Ocelot"};
+	
+	public static int[] ring_rarity = {
+			2
+			,0
+			,1
+			,0
+			,1
+			,0
+			,0
+			,2
+			,3
+			,0
+			,0
+			,1};
+	
+	public static List<effectType[]> ring_effects = new ArrayList<effectType[]>();
+	
+	static
+	{
+		ring_effects.add(new effectType[] {effectType.JUMP_2, effectType.SPEED_2});
+		ring_effects.add(new effectType[] {effectType.DAMAGE_1});
+		ring_effects.add(new effectType[] {effectType.DAMAGE_2});
+		ring_effects.add(new effectType[] {effectType.RESISTANCE_1});
+		ring_effects.add(new effectType[] {effectType.RESISTANCE_2});
+		ring_effects.add(new effectType[] {effectType.JUMP_1});
+		ring_effects.add(new effectType[] {effectType.JUMP_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_2, effectType.DAMAGE_2, effectType.RESISTANCE_2});
+		ring_effects.add(new effectType[] {effectType.SPEED_1});
+		ring_effects.add(new effectType[] {effectType.SPEED_2});
+		ring_effects.add(new effectType[] {effectType.HASTE_1});
+	}
+	
 	public static void init(File cFile)
 	{
 		configuration = new Configuration(cFile);
@@ -160,6 +254,14 @@ public static Configuration configuration;
 		String[] sword_names1 = configuration.getStringList("sword_names", "names", sword_names, "Names for swords, must be " + WCLConstants.totalSwords);
 		if (sword_names1.length == WCLConstants.totalSwords)
 			sword_names = sword_names1;
+		
+		String[] bow_names1 = configuration.getStringList("bow_names", "names", bow_names, "Names for bows, must be 12");
+		if (bow_names1.length == 12)
+			bow_names = bow_names1;
+		
+		String[] ring_names1 = configuration.getStringList("ring_names", "names", ring_names, "Names for rings, must be 12");
+		if (ring_names1.length == 12)
+			ring_names = ring_names1;
 		
 		configuration.save();
 	}

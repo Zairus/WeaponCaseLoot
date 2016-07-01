@@ -1,0 +1,10 @@
+itemGroup.weaponCaseLoot=Waffenkiste
+item.weaponcase.name=Waffenkiste: Erste Edition
+item.weaponcase2.name=Waffenkiste: Zweite Edition
+item.weaponcase3.name=Waffenkiste: Bögen
+item.weaponcase4.name=Waffenkiste: Baubles Ringe
+item.weaponsword.name=Waffe Schwert
+item.weaponbow.name=Waffe Bogen
+item.bauble.name=Waffe Ring
+achievement.legendary=Legendär
+achievement.legendary.desc=Erhalte ein legendäres Schwert aus einer Waffenkiste

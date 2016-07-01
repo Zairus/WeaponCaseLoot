@@ -1,4 +1,4 @@
-package zairus.weaponcaseloot.sounds;
+package zairus.weaponcaseloot.sound;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -8,6 +8,9 @@ public class WCLSoundEvents
 {
 	public static SoundEvent weapon_loop;
 	public static SoundEvent blade;
+	public static SoundEvent power;
+	public static SoundEvent draw;
+	public static SoundEvent bow_open;
 	public static SoundEvent case_open;
 	
 	private static int lastSoundId = -1;
@@ -47,6 +50,9 @@ public class WCLSoundEvents
 		
 		weapon_loop = registerSound("weapon_loop");
 		blade = registerSound("blade");
+		power = registerSound("power");
+		draw = registerSound("draw");
+		bow_open = registerSound("bow_open");
 		case_open = registerSound("case_open");
 	}
 }

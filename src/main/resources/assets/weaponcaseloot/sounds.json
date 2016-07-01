@@ -23,4 +23,28 @@
 			,{"name": "weaponcaseloot:blade3", "stream": false}
 		]
 	}
+	,"power": {
+		"category": "master"
+		,"sounds": [
+			{"name": "weaponcaseloot:power1", "stream": false}
+			,{"name": "weaponcaseloot:power2", "stream": false}
+			,{"name": "weaponcaseloot:power3", "stream": false}
+			,{"name": "weaponcaseloot:power4", "stream": false}
+		]
+	}
+	,"draw": {
+		"category": "master"
+		,"sounds": [
+			{"name": "weaponcaseloot:longbow_draw_1", "stream": false}
+		]
+	}
+	,"bow_open": {
+		"category": "master"
+		,"sounds": [
+			{"name": "weaponcaseloot:bow_open1", "stream": false}
+			,{"name": "weaponcaseloot:bow_open2", "stream": false}
+			,{"name": "weaponcaseloot:bow_open3", "stream": false}
+			,{"name": "weaponcaseloot:bow_open4", "stream": false}
+		]
+	}
 }

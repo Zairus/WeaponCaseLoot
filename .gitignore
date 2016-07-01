@@ -2,12 +2,8 @@
 /eclipse/
 /build/
 /__wfiles/
-/.classpath
-/.project
-/.settings/
-/library/
+/run/
 
-/libs/
 /build.bat
 
 # eclipse

@@ -1,5 +1,8 @@
+itemGroup.weaponCaseLoot=Weapon Case Loot
 item.weaponcase1.name=Weapon Case: First Edition
 item.weaponcase2.name=Weapon Case: Second Edition
+item.weaponcase3.name=Weapon Case: Bows
+item.weaponcase4.name=Weapon Case: Baubles Rings
 weaponsword.name=Weapon Sword
 bauble.name=Weapon Case Ring of Awesomeness
 achievement.legendary=Legendary

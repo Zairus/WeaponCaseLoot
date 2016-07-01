@@ -1,24 +1,42 @@
 package zairus.weaponcaseloot.item;
 
+import net.minecraft.item.Item;
 import zairus.weaponcaseloot.WeaponCaseLoot;
 
 public class WCLItems
 {
-	public static WCLItem weaponcase;
-	public static WCLItemWeapon sword;
+	public static Item weaponcase;
+	public static Item sword;
+	public static Item bow;
+	
+	public static Item bauble;
 	
 	static
 	{
-		weaponcase = new WeaponCase();
-		sword = new WeaponSword();
+		weaponcase = new WeaponCase().setRegistryName("weaponcase").setUnlocalizedName("weaponcase");
+		sword = new WeaponSword().setRegistryName("weaponsword").setUnlocalizedName("weaponsword");
+		bow = new WeaponBow().setRegistryName("weaponbow").setUnlocalizedName("weaponbow");
+		
+		if (WeaponCaseLoot.baublesExist())
+		{
+			bauble = new WCLItemBauble().setRegistryName("baublering").setUnlocalizedName("baublering");
+		}
 	}
 	
 	public static final void register()
 	{
 		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase1", 0, true);
 		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase2", 1, true);
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase3", 2, true);
+		WeaponCaseLoot.proxy.registerItem(weaponcase, "weaponcase4", 3, true);
 		
-		WeaponCaseLoot.proxy.registerSwordItem(sword, "weaponsword");
+		WeaponCaseLoot.proxy.registerSwordItem((WCLItemWeapon)sword, "weaponsword");
+		WeaponCaseLoot.proxy.registerBowItem((WeaponBow)bow, "weaponbow");
+		
+		if (WeaponCaseLoot.baublesExist())
+		{
+			WeaponCaseLoot.proxy.registerBaubleItem((WCLItemBauble)bauble, "baublering");
+		}
 	}
 	
 	public static final void addLoot()
