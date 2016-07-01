@@ -11,37 +11,20 @@ This mapping 'stable_20' was designed for MC 1.8.8! Use at your own peril.This m
 #################################################
 :deobfCompileDummyTask
 :deobfProvidedDummyTask
-:sourceApiJava UP-TO-DATE
-:compileApiJava UP-TO-DATE
-:processApiResources UP-TO-DATE
-:apiClasses UP-TO-DATE
-:sourceMainJava
-:compileJavawarning: [options] bootstrap class path not set in conjunction with -source 1.6
-1 warning
-
-:processResources
-:classes
-:jar
-:sourceTestJava UP-TO-DATE
-:compileTestJava UP-TO-DATE
-:processTestResources UP-TO-DATE
-:testClasses UP-TO-DATE
-:test UP-TO-DATE
-:extractMcpData SKIPPED
-:extractMcpMappings SKIPPED
+:eclipseClasspath
+:eclipseJdt
+:eclipseProject
 :getVersionJson
+:extractNatives SKIPPED
 :extractUserdev UP-TO-DATE
-:genSrgs SKIPPED
-:reobfJar
-:extractRangemapReplacedMain
-C:\Users\Paul\git\WeaponCaseLoot-1.8\build\sources\main\java
-:retromapReplacedMain
-remapping source...
-:sourceJar
-:assemble
-:check UP-TO-DATE
-:build
+:getAssetIndex UP-TO-DATE
+:getAssets
+Current status: 561/734   76%
+:makeStart
+:makeEclipseCleanRunClient
+:makeEclipseCleanRunServer
+:eclipse
 
 BUILD SUCCESSFUL
 
-Total time: 29.368 secs
+Total time: 24.346 secs
