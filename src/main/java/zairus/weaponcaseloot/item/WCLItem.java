@@ -10,6 +10,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import zairus.weaponcaseloot.WCLConstants;
 import zairus.weaponcaseloot.sound.WCLSoundEvents;
+import zairus.weaponcaseloot.stats.WCLAchievementList;
 
 public class WCLItem extends Item
 {
@@ -72,12 +73,11 @@ public class WCLItem extends Item
 				
 				if (t <= 10.0F)
 				{
-					/*
 					int rarity = rarity_array[tag.getInteger("temp_index")];
 					
 					if (rarity == 3)
-						((EntityPlayer)entity).triggerAchievement(WCLAchievementList.legendary);
-					*/
+						((EntityPlayer)entity).addStat(WCLAchievementList.legendary);
+					
 					tag.removeTag(WCLConstants.KEY_LOOPSOUNDTIMER);
 					tag.setInteger(WCLConstants.KEY_WEAPONINDEX, tag.getInteger("temp_index"));
 					tag.removeTag("temp_index");
