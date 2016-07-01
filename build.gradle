@@ -20,12 +20,12 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "3.2.3"
+version = "4.0.0"
 group= "zairus.weaponcaseloot"
-archivesBaseName = "weaponcaseloot-1.9.4"
+archivesBaseName = "weaponcaseloot-1.10.2"
 
 minecraft {
-    version = "1.9.4-12.17.0.1987"
+    version = "1.10.2-12.18.0.2005-1.10.0"
     runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
