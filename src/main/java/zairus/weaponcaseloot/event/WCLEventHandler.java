@@ -28,15 +28,18 @@ public class WCLEventHandler
 		
 		ItemStack stack = event.getEntity().getActiveItemStack();
 		
-		if (stack.getItem() instanceof WeaponBow)
+		if (stack != null)
 		{
-			WeaponBow item = (WeaponBow)stack.getItem();
-			
-			if (item.updatesFOV())
+			if (stack.getItem() instanceof WeaponBow)
 			{
-				float newfov = event.getFov() / (event.getFov() + (item.getFOVValue(stack) * getItemInUsePercentaje(event.getEntity(), item.getFOVSpeedFactor(stack))));
+				WeaponBow item = (WeaponBow)stack.getItem();
 				
-				event.setNewfov(newfov);
+				if (item.updatesFOV())
+				{
+					float newfov = event.getFov() / (event.getFov() + (item.getFOVValue(stack) * getItemInUsePercentaje(event.getEntity(), item.getFOVSpeedFactor(stack))));
+					
+					event.setNewfov(newfov);
+				}
 			}
 		}
 	}
