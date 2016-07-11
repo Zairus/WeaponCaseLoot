@@ -28,7 +28,7 @@ public class WCLEventHandler
 		
 		ItemStack stack = event.getEntity().getActiveItemStack();
 		
-		if (stack.getItem() instanceof WeaponBow)
+		if (stack != null && stack.getItem() instanceof WeaponBow)
 		{
 			WeaponBow item = (WeaponBow)stack.getItem();
 			

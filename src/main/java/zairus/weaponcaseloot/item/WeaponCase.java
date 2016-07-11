@@ -86,8 +86,6 @@ public class WeaponCase extends WCLItem
 			
 			ItemStack weapon = ((WeaponSword)WCLItems.sword).getSwordFromId(swordId, quality);
 			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
-			
 			if (!player.inventory.addItemStackToInventory(weapon))
 			{
 				if (!world.isRemote)
@@ -99,8 +97,6 @@ public class WeaponCase extends WCLItem
 			int bowId = getSwordIdFromRarity(new ItemStack(WCLItems.weaponcase, 1, 0), level);
 			
 			ItemStack bow = ((WeaponBow)WCLItems.bow).getFromId(bowId, quality);
-			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
 			
 			if (!player.inventory.addItemStackToInventory(bow))
 			{
@@ -114,14 +110,14 @@ public class WeaponCase extends WCLItem
 			
 			ItemStack ring = ((WCLItemBauble)WCLItems.bauble).getRingFromId(ringId, quality);
 			
-			player.inventory.decrStackSize(player.inventory.currentItem, 1);
-			
 			if (!player.inventory.addItemStackToInventory(ring))
 			{
 				if (!world.isRemote)
 					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ring));
 			}
 		}
+		
+		player.inventory.decrStackSize(player.inventory.currentItem, 1);
 		
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}

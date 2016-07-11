@@ -90,9 +90,16 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack)
 			{
-				int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-				
-				return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponsword_" + (meta + 1), "inventory");
+				if (stack == null || !stack.hasTagCompound())
+				{
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponsword_1", "inventory");
+				}
+				else
+				{
+					int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
+					
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponsword_" + (meta + 1), "inventory");
+				}
 			}
 		});
 		
@@ -108,30 +115,37 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack)
 			{
-				int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-				
-				String pullingString = "";
-				
-				if (Minecraft.getMinecraft().thePlayer.getActiveItemStack() == stack)
+				if (stack == null || !stack.hasTagCompound())
 				{
-					int pulling = stack.getMaxItemUseDuration() - (Minecraft.getMinecraft().thePlayer.getItemInUseCount());
-					pulling = (int)((float)pulling * (1.0f + (WeaponBow.getDrawSpeed(stack) / 1.0f)));
-					
-					if (pulling >= 25)
-					{
-						pullingString = "_pulling_2";
-					}
-					else if (pulling > 15)
-					{
-						pullingString = "_pulling_1";
-					}
-					else if (pulling > 2)
-					{
-						pullingString = "_pulling_0";
-					}
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponbow_1", "inventory");
 				}
-				
-				return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponbow_" + (meta + 1) + pullingString, "inventory");
+				else
+				{
+					int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
+					
+					String pullingString = "";
+					
+					if (Minecraft.getMinecraft().thePlayer.getActiveItemStack() == stack)
+					{
+						int pulling = stack.getMaxItemUseDuration() - (Minecraft.getMinecraft().thePlayer.getItemInUseCount());
+						pulling = (int)((float)pulling * (1.0f + (WeaponBow.getDrawSpeed(stack) / 1.0f)));
+						
+						if (pulling >= 25)
+						{
+							pullingString = "_pulling_2";
+						}
+						else if (pulling > 15)
+						{
+							pullingString = "_pulling_1";
+						}
+						else if (pulling > 2)
+						{
+							pullingString = "_pulling_0";
+						}
+					}
+					
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":weaponbow_" + (meta + 1) + pullingString, "inventory");
+				}
 			}
 		});
 		
@@ -151,9 +165,16 @@ public class ClientProxy extends CommonProxy
 		renderItem.getItemModelMesher().register(bauble, new ItemMeshDefinition() {
 			@Override
 			public ModelResourceLocation getModelLocation(ItemStack stack) {
-				int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
-				
-				return new ModelResourceLocation(WCLConstants.MOD_ID + ":baublering_" + (meta + 1), "inventory");
+				if (stack == null || !stack.hasTagCompound())
+				{
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":baublering_1", "inventory");
+				}
+				else
+				{
+					int meta = stack.getTagCompound().getInteger(WCLConstants.KEY_WEAPONINDEX);
+					
+					return new ModelResourceLocation(WCLConstants.MOD_ID + ":baublering_" + (meta + 1), "inventory");
+				}
 			}
 		});
 		

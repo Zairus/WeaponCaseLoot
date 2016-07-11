@@ -21,7 +21,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -166,7 +165,11 @@ public class WeaponSword extends WCLItemWeapon
 		if (j > 0)
 			enemy.setFire(j * 4);
 		
-		stack.damageItem(1, enemy);
+		if (holder instanceof EntityPlayer)
+		{
+			if(!((EntityPlayer)holder).capabilities.isCreativeMode)
+				stack.damageItem(1, enemy);
+		}
 		
 		return flag;
 	}
@@ -191,7 +194,7 @@ public class WeaponSword extends WCLItemWeapon
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
 	{
-		return EnumAction.BLOCK;
+		return super.getItemUseAction(stack);
 	}
 	
 	@Override
@@ -201,9 +204,9 @@ public class WeaponSword extends WCLItemWeapon
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand)
 	{
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+		return super.onItemRightClick(itemStack, world, player, hand);
 	}
 	
 	@Override
