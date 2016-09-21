@@ -20,7 +20,7 @@ plugins {
     id "net.minecraftforge.gradle.forge" version "2.0.2"
 }
 */
-version = "4.0.1"
+version = "4.0.2"
 group= "zairus.weaponcaseloot"
 archivesBaseName = "weaponcaseloot-1.10.2"
 
