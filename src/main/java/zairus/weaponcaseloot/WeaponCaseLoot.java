@@ -41,12 +41,15 @@ public class WeaponCaseLoot
 		logger = event.getModLog();
 		
 		WeaponCaseLoot.proxy.preInit(event);
+		
+		WCLConfig.init(event.getSuggestedConfigurationFile());
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{
 		WeaponCaseLoot.proxy.init(event);
+		
 		WCLItems.register();
 		WCLItems.addLoot();
 		
