@@ -87,6 +87,7 @@ public class WeaponSword extends WCLItemWeapon
 		return meta;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getMaxDamage()
 	{

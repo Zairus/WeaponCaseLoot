@@ -54,6 +54,7 @@ public class WeaponBow extends ItemBow
 		return this;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public int getMaxDamage()
 	{
