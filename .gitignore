@@ -3,6 +3,8 @@
 /build/
 /__wfiles/
 /run/
+/.settings/
+/.gradle/
 
 /build.bat
 
