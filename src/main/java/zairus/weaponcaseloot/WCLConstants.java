@@ -4,7 +4,7 @@ public class WCLConstants
 {
 	public static final String MOD_ID = "weaponcaseloot";
 	public static final String MOD_NAME = "Weapon Case Loot";
-	public static final String MOD_VERSION = "4.0.2";
+	public static final String MOD_VERSION = "5.0.3-beta";
 	
 	public static final String MOD_COMMON_PROXY = "zairus.weaponcaseloot.proxy.CommonProxy";
 	public static final String MOD_CLIENT_PROXY = "zairus.weaponcaseloot.proxy.ClientProxy";

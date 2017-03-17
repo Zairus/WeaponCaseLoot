@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
@@ -44,11 +45,14 @@ public class WCLItemBauble extends WCLItem implements IBauble
 			if (tag.hasKey(WCLConstants.KEY_LOOPSOUNDTIMER))
 				stack = WCLItem.loop(stack, "Case Ring", WCLSoundEvents.power, WCLConfig.ring_rarity, world, entity, 0, 12);
 		}
+		
+		if (entity instanceof EntityLivingBase)
+			wornTick(stack, (EntityLivingBase)entity);
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs creativeTab, @SuppressWarnings("rawtypes") List list)
+	public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list)
     {
 		for (int i = 0; i < 12; ++i)
 		{
@@ -91,9 +95,8 @@ public class WCLItemBauble extends WCLItem implements IBauble
 	}
 	
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b1)
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced)
     {
 		NBTTagCompound tag = stack.getTagCompound();
 		
@@ -149,6 +152,11 @@ public class WCLItemBauble extends WCLItem implements IBauble
 	
 	@Override
 	public void onWornTick(ItemStack stack, EntityLivingBase entity)
+	{
+		wornTick(stack, entity);
+	}
+	
+	private void wornTick(ItemStack stack, EntityLivingBase entity)
 	{
 		if (entity instanceof EntityPlayer)
 		{

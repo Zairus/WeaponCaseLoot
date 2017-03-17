@@ -14,7 +14,7 @@ public static final WCLEffectHandler instance = new WCLEffectHandler();
 	
 	public void applyEffect(EntityPlayer player, effectType effect, boolean add)
 	{
-		if (player.worldObj.isRemote)
+		if (player.world.isRemote)
 			return;
 		
 		if (add && effect.isPotion())

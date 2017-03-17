@@ -21,6 +21,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -191,7 +192,7 @@ public class WeaponBow extends ItemBow
 					entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 				
 				if (!world.isRemote)
-					world.spawnEntityInWorld(entityarrow);
+					world.spawnEntity(entityarrow);
 			}
 			
 			if (!world.isRemote)
@@ -207,9 +208,9 @@ public class WeaponBow extends ItemBow
 			
 			if (!flag)
 			{
-				--itemStack.stackSize;
+				itemStack.shrink(1);
 				
-				if (itemStack.stackSize == 0)
+				if (itemStack.isEmpty())
 				{
 					player.inventory.deleteStack(itemStack);
 				}
@@ -223,8 +224,10 @@ public class WeaponBow extends ItemBow
 	}
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
 	{
+		ItemStack stack = player.getHeldItem(hand);
+		
 		boolean flag = this.findAmmo(player) != null;
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(stack, world, player, hand, flag);
 		if (ret != null)
@@ -251,9 +254,8 @@ public class WeaponBow extends ItemBow
 	}
 	
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean b1)
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advanced)
     {
 		NBTTagCompound tag = stack.getTagCompound();
 		
@@ -306,9 +308,9 @@ public class WeaponBow extends ItemBow
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs creativeTab, @SuppressWarnings("rawtypes") List list)
+	public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list)
     {
 		for (int i = 0; i < 12; ++i)
 		{

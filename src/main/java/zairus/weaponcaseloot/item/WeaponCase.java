@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -37,13 +38,13 @@ public class WeaponCase extends WCLItem
 	@Override
 	public String getUnlocalizedName(ItemStack stack)
 	{
-		int i = MathHelper.clamp_int(stack.getItemDamage() + 1, 0, editions);
+		int i = MathHelper.clamp(stack.getItemDamage() + 1, 0, editions);
 		return super.getUnlocalizedName() + "" + i;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@Override
 	@SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs creativeTab, @SuppressWarnings("rawtypes") List list)
+	public void getSubItems(Item item, CreativeTabs creativeTab, NonNullList<ItemStack> list)
     {
 		for (int i = 0; i < editions; ++i)
 		{
@@ -52,8 +53,10 @@ public class WeaponCase extends WCLItem
     }
 	
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
 	{
+		ItemStack stack = player.getHeldItem(hand);
+		
 		int chance = itemRand.nextInt(100);
 		int level;
 		
@@ -89,7 +92,7 @@ public class WeaponCase extends WCLItem
 			if (!player.inventory.addItemStackToInventory(weapon))
 			{
 				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
+					world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, weapon));
 			}
 		}
 		else if (stack.getItemDamage() == 2)
@@ -101,7 +104,7 @@ public class WeaponCase extends WCLItem
 			if (!player.inventory.addItemStackToInventory(bow))
 			{
 				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, bow));
+					world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, bow));
 			}
 		}
 		else if (stack.getItemDamage() == 3 && WeaponCaseLoot.baublesExist())
@@ -113,7 +116,7 @@ public class WeaponCase extends WCLItem
 			if (!player.inventory.addItemStackToInventory(ring))
 			{
 				if (!world.isRemote)
-					world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, ring));
+					world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, ring));
 			}
 		}
 		

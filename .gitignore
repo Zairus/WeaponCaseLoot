@@ -5,6 +5,7 @@
 /run/
 /.settings/
 /.gradle/
+/libs/
 
 /build.bat
 

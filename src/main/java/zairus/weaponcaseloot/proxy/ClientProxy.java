@@ -125,9 +125,9 @@ public class ClientProxy extends CommonProxy
 					
 					String pullingString = "";
 					
-					if (Minecraft.getMinecraft().thePlayer.getActiveItemStack() == stack)
+					if (Minecraft.getMinecraft().player.getActiveItemStack() == stack)
 					{
-						int pulling = stack.getMaxItemUseDuration() - (Minecraft.getMinecraft().thePlayer.getItemInUseCount());
+						int pulling = stack.getMaxItemUseDuration() - (Minecraft.getMinecraft().player.getItemInUseCount());
 						pulling = (int)((float)pulling * (1.0f + (WeaponBow.getDrawSpeed(stack) / 1.0f)));
 						
 						if (pulling >= 25)

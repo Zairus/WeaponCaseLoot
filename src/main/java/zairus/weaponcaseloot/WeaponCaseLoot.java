@@ -3,7 +3,7 @@ package zairus.weaponcaseloot;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -29,9 +29,9 @@ public class WeaponCaseLoot
 	
 	public static CreativeTabs weaponCaseLootTab = new CreativeTabs("weaponCaseLoot") {
 		@Override
-		public Item getTabIconItem()
+		public ItemStack getTabIconItem()
 		{
-			return WCLItems.weaponcase;
+			return new ItemStack(WCLItems.weaponcase);
 		}
 	};
 	
