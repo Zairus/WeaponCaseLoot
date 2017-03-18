@@ -1,0 +1,10 @@
+itemGroup.weaponCaseLoot=Weapon Case Loot
+item.weaponcase.name=武器箱:第一版
+item.weaponcase.2.name=武器箱:第二版
+item.weaponcase.3.name=武器箱:弓
+item.weaponcase.4.name=武器箱:指环
+item.weaponsword.name=剑
+item.weaponbow.name=弓
+item.bauble.name=武器箱指环
+achievement.legendary=传奇
+achievement.legendary.desc=从武器箱中获取传奇武器
